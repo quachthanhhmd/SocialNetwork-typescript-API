@@ -1,16 +1,15 @@
 import express from 'express';
 
-//Swagger 
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsDoc from "swagger-jsdoc";
+
 //----
 import cors from "cors";
-import morgan from "morgan";
 
-import * as bodyParser from 'body-parser';
+import morgan from './config/morgan';
+import env from "./config/environments";
+
+import routes from "./routes/v1/index";
 
 
-import { options } from "./docs/swaggerOption";
 
 
 class App {
@@ -19,11 +18,29 @@ class App {
     constructor() {
         this.httpServer = express()
 
-        this.httpServer.use(bodyParser.urlencoded({ extended: true }));
-        this.httpServer.use(bodyParser.json());
+        if (env.TYPE != "test") {
+            this.httpServer.use(morgan.successHandler);
+            this.httpServer.use(morgan.errorHandler);
+        };
 
-        const swaggerDocument = swaggerJsDoc(options);
-        this.httpServer.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        // parse json request body
+        this.httpServer.use(express.json());
+
+        // parse urlencoded request body
+        this.httpServer.use(express.urlencoded({ extended: true }));
+
+
+
+        // enable cors
+        this.httpServer.use(cors());
+        this.httpServer.options('*', cors());
+
+        this.httpServer.use("/", routes);
+        
+        // send back a 404 error for any unknown api request
+        // this.httpServer.use((req, res, next) => {
+        //     next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
+        // });
     }
 
     public Start = (port: number) => {
