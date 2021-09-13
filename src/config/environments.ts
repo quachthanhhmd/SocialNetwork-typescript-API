@@ -12,7 +12,7 @@ const envSchema: Joi.ObjectPropertiesSchema = Joi.object()
         DB_PASSWORD: Joi.string().required(),
         DB_DATABASE_NAME: Joi.string().required(),
         DB_DIALECT: Joi.string().required(),
-        DB_DATABASE_PORT: Joi.number().default(3036),
+        DB_DATABASE_PORT: Joi.number().default(3306),
 
     })
     .unknown();
