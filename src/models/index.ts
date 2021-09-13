@@ -1,3 +1,5 @@
+import env from "../config/environments";
+
 import User from "./user";
 import UserFriend from "./userFriends";
 import UserProfile from "./userProfile";
@@ -7,24 +9,35 @@ import Contact from "./contacts";
 import Comment from "./comments";
 import UserBackground from "./userBackground";
 import Photo from "./photos";
+import Token from "./token";
+
 
 export const associate = async () => {
 
-    await Photo.drop();
-    await UserBackground.drop();
-    await Comment.drop();
-    await UserPost.drop();
-    await Message.drop();
-    await Contact.drop();
-    await UserProfile.drop();
-    await UserPost.drop();
-    await UserFriend.drop();
-    await User.drop();
 
+    //DON'T DROP ALL TABLE IN OTHER TYPES EXCEPT DEVELOPMENT
+    if (env.TYPE === "development") {
+        await Token.drop();
+        await Photo.drop();
+        await UserBackground.drop();
+        await Comment.drop();
+        await UserPost.drop();
+        await Message.drop();
+        await Contact.drop();
+        await UserProfile.drop();
+        await UserPost.drop();
+        await UserFriend.drop();
+        await User.drop();
+    }
 
     // //User with Profile
     User.hasOne(UserProfile);
     UserProfile.belongsTo(User);
+
+    //User with token
+
+    User.hasMany(Token);
+    Token.belongsTo(User);
 
     //User Profile and contacts
     UserProfile.hasOne(Contact);
@@ -76,5 +89,6 @@ export const associate = async () => {
     await Comment.sync({ force: true });
     await Photo.sync({ force: true });
     await UserBackground.sync({ force: true });
+    await Token.sync({ force: true });
 }
 

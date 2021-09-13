@@ -10,8 +10,6 @@ interface UserAttributes {
   id?: number,
   username: string,
   password: string,
-  passwordResetToken?: string | null,
-  passwordResetExpire?: string | null,
   isVerified?: Boolean,
   //lastLogin?: Date | null,
   //birthDay: Date,
@@ -29,8 +27,6 @@ class Users extends Model<UserCreationAttributes, UserAttributes>
 
   public username!: string;
   public password!: string;
-  public passwordResetToken!: string | null;
-  public passwordResetExpire!: string | null;
   public isVerified!: Boolean;
 
 
@@ -69,14 +65,6 @@ Users.init({
       const hash = initPasswordHash(password);
       this.setDataValue('password', hash);
     }
-  },
-  passwordResetToken: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  passwordResetExpire: {
-    type: DataTypes.STRING,
-    allowNull: true,
   },
   isVerified: {
     type: DataTypes.BOOLEAN,
