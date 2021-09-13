@@ -1,15 +1,17 @@
+import env from "../config/environments";
+
 
 export const options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "Tasks API",
+            title: "Social Network",
             version: "1.0.0",
-            description: "A simple express library API",
+            description: "Build a social network website using typescript, express, sequelize,...",
         },
         servers: [
             {
-                url: "http://localhost:3000",
+                url: `http://localhost:${env.PORT}`,
             },
         ],
     },
