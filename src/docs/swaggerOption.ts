@@ -15,5 +15,5 @@ export const options = {
             },
         ],
     },
-    apis: ["./src/docs/*.yml", "./src/routes/*.ts"],
+    apis: ["./src/docs/*.yml", "./src/routes/v1/*.ts"],
 };

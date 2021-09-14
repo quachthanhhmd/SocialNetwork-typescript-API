@@ -7,14 +7,14 @@ import Token from "../models/token";
 import env from "../config/environments";
 import { ITokenAttributes, IPayload } from "../interfaces/token.interface";
 import { Op } from "sequelize";
-
+import { TYPETOKEN } from "../constants/token.constant";
 
 /**
  * SAVE TOKEN IN DATABASE
  * @param {ITokenAttributes} token 
  * @returns {Promise<Token>} newToken
  */
-const saveToken = async (token: ITokenAttributes): Promise<Token> => {
+const storeToken = async (token: ITokenAttributes): Promise<Token> => {
 
 
 
@@ -45,7 +45,7 @@ const generateToken = (token: ITokenAttributes): string => {
 };
 
 
-const verifyToken = async (tokenName: string, type: string): Promise<Token | null> => {
+const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Promise<Token | null> => {
 
     const payload = jwt.verify(tokenName, env.TOKEN_SERCET);
 
@@ -68,7 +68,7 @@ const verifyToken = async (tokenName: string, type: string): Promise<Token | nul
 }
 
 export default {
-    saveToken,
+    storeToken,
     generateToken,
     verifyToken,
 }

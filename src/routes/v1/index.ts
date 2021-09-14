@@ -1,6 +1,8 @@
 import express from "express";
 
 import swaggerRouter from "./docs.route";
+import authRoutes from "./auth.route";
+
 import env from "../../config/environments";
 
 const router: express.Router = express.Router();
@@ -10,7 +12,12 @@ type indexRoutesAttributes = {
     route: express.Router,
 }
 
-const indexRouteList: Array<indexRoutesAttributes> = [];
+const indexRouteList: Array<indexRoutesAttributes> = [
+    {
+        path: "/auth",
+        route: authRoutes,
+    }
+];
 
 
 const developmentRouteList: Array<indexRoutesAttributes> = [
