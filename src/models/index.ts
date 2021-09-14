@@ -36,8 +36,11 @@ export const associate = async () => {
 
     //User with token
 
-    User.hasMany(Token);
-    Token.belongsTo(User);
+    User.hasMany(
+        Token,
+        { foreignKey: "userId" }
+    );
+    Token.belongsTo(User, { foreignKey: "userId", });
 
     //User Profile and contacts
     UserProfile.hasOne(Contact);
