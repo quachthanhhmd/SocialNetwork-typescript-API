@@ -53,7 +53,7 @@ const createUser = async (user: createUserAttributes): Promise<User | null> => {
     //Check user exist in DB
     const checkUserExist = await findUserbyUsername(user.username);
 
-    if (!checkUserExist) throw UserError.UsernameExist;
+    if (checkUserExist) throw UserError.UsernameExist;
 
     //Create User
     const createUser = await User.create({
@@ -74,9 +74,8 @@ const createUser = async (user: createUserAttributes): Promise<User | null> => {
         userId: createUser.id,
     }
 
-    const createUserProfile = userProfileService.createUserProfile(userProfile);
+    userProfileService.createUserProfile(userProfile);
 
-    
 
     return createUser;
 }

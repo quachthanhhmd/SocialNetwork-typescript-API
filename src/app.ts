@@ -1,4 +1,6 @@
-import express from 'express';
+import httpStatus  from 'http-status';
+
+import express, { Request, Response, NextFunction } from 'express';
 
 
 //----
@@ -9,7 +11,7 @@ import env from "./config/environments";
 
 import routes from "./routes/v1/index";
 
-
+import ApiError from "./utils/ApiError";
 
 
 class App {
@@ -37,10 +39,10 @@ class App {
 
         this.httpServer.use("/", routes);
         
-        // send back a 404 error for any unknown api request
-        // this.httpServer.use((req, res, next) => {
-        //     next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
-        // });
+        //send back a 404 error for any unknown api request
+        this.httpServer.use((req: Request, res : Response, next :NextFunction) => {
+            next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
+        });
     }
 
     public Start = (port: number) => {

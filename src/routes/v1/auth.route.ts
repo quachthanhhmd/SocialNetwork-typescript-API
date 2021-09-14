@@ -2,10 +2,14 @@ import express from "express";
 
 import authRouter from "../../controllers/auth.controller";
 
+import validate from "../../middlewares/validate.middleware";
+
+import validateAuth from "../../validations/auth.validation";
+
 const router: express.Router = express.Router();
 
 
-router.post("/signup", authRouter.signUp);
+router.post("/signup",  validate(validateAuth.signUp), authRouter.signUp);
 
 
 
@@ -69,10 +73,10 @@ router.post("/signup", authRouter.signUp);
  *               properties:
  *                 user:
  *                   $ref: '#/components/schemas/User'
- *                 tokens:
- *                   $ref: '#/components/schemas/AuthTokens'
  *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
+ *         $ref: '#/components/responses/DuplicateUsername'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'
  */
 
 

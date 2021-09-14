@@ -9,3 +9,15 @@ export interface CreateUserProfile {
     gender: string,
     userId: number,
 }
+
+export interface IUserInfo {
+
+    id: number,
+    username: string,
+    profile: {
+        firstName: string,
+        lastName: string,
+        birthDay: Date,
+        gender: string,
+    }  
+}
