@@ -22,8 +22,15 @@ const signIn = {
         password: Joi.string(),
     }),
 }
+const logout = {
+    body: Joi.object().keys({
+      refreshToken: Joi.string().required(),
+    }),
+  };
+  
 
 export default {
     signUp,
-    signIn
+    signIn,
+    logout
 }

@@ -8,8 +8,10 @@ import env from "../config/environments";
 import { ITokenAttributes, IPayload } from "../interfaces/token.interface";
 import { Op } from "sequelize";
 import { TYPETOKEN } from "../constants/token.constant";
-import  User  from "../models/user";
 
+
+import  User  from "../models/user";
+import authError from "../constants/apiError/auth.constant";
 
 /**
  * SAVE TOKEN IN DATABASE
@@ -35,6 +37,7 @@ const storeToken = async (token: ITokenAttributes): Promise<Token> => {
  */
 const generateToken = (userId: number, expire: moment.Moment, type: string): string => {
 
+    console.log(expire.unix());
     const payload: IPayload = {
         sub: userId,
         iat: moment().unix(),
@@ -67,15 +70,19 @@ const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Pr
             ]
         }
     });
-    console.log(tokenDoc);
+
 
     return tokenDoc;
 }
 
-
+/**
+ * generate token to authenticate
+ * @param {User} user 
+ * @returns {Project<Object>} access and fresh token
+ */
 const generateTokenAuth = async (user: User) =>{
 
-    const tokenExpire = moment().add(env.TOKEN.TOKEN_EXPIRE_DAY, "days");
+    const tokenExpire = moment().add(env.TOKEN.TOKEN_EXPIRE_MINUTES, "minutes");
     const generateAccessToken = generateToken(user.id, tokenExpire, TYPETOKEN.ACCESS);
 
     const tokenRefreshExpire = moment().add(env.TOKEN.TOKEN_EXPIRE_DAY, 'days');
@@ -100,9 +107,23 @@ const generateTokenAuth = async (user: User) =>{
     }
 }
 
+const removeToken = async (token: string, type: string) =>{
+
+
+    await Token.destroy( {
+        where: {
+        [Op.and]: {
+            token: token,
+            type: type,
+        }
+    }});
+}
+
+
 export default {
     storeToken,
     generateToken,
     verifyToken,
-    generateTokenAuth
+    generateTokenAuth,
+    removeToken,
 }

@@ -9,6 +9,8 @@ import tokenService from "../services/token.service";
 
 import { IUserInfo } from "../interfaces/user.interface";
 
+import authError from "../constants/apiError/auth.constant";
+
 const signUp = catchAsync(async (req: Request, res: Response) => {
 
 
@@ -30,15 +32,29 @@ const signIn = catchAsync( async (req: Request, res: Response) =>{
 
 
     const tokenCreate = await tokenService.generateTokenAuth(userInfo);
-
-    
-    Object.assign(userInfo, tokenCreate);
     
 
-    return res.status(200).send({user: userInfo});
+    return res.status(httpStatus.CREATED).send({user: userInfo, token: tokenCreate});
 })
+
+
+/**
+ * Logout controllers
+ * Logout only use when user login into server
+ */
+const logout = catchAsync( async (req: Request, res: Response) =>{
+
+    //Be sure to user has been login since I had code middleware.
+    await authService.logoutAuth(req.body.refreshToken);
+
+    req.logOut();
+
+    res.status(httpStatus.OK).send("Success logout");
+})
+
 
 export default {
     signUp,
-    signIn
+    signIn,
+    logout
 }

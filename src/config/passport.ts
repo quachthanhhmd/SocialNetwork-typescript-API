@@ -7,10 +7,11 @@ import userService from "../services/user.service";
 
 
 const JwtOptions = {
-    secret: env.TOKEN.TOKEN_SERCET,
+    secretOrKey: env.TOKEN.TOKEN_SERCET,
     jwtFromRequest: passportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
 };
 
+console.log(JwtOptions.jwtFromRequest.toString());
 
 const verifyToken = async(payload: any, done: passportJwt.VerifiedCallback) =>{
 
@@ -18,9 +19,9 @@ const verifyToken = async(payload: any, done: passportJwt.VerifiedCallback) =>{
         if (payload.type !== TYPETOKEN.ACCESS){
             throw new Error("Token is not valid!");
         }
-
-        const user = await userService.getInfoOfUser(payload.id);
-
+  
+        const user = await userService.getInfoOfUser(payload.sub);
+        
         if (!user) return done(null, false);
 
 

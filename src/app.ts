@@ -1,4 +1,5 @@
 import httpStatus  from 'http-status';
+import passport from "passport";
 
 import express, { Request, Response, NextFunction } from 'express';
 
@@ -8,11 +9,11 @@ import cors from "cors";
 
 import morgan from './config/morgan';
 import env from "./config/environments";
-
 import routes from "./routes/v1/index";
-
 import ApiError from "./utils/ApiError";
 
+
+import passportConfig from "./config/passport";
 
 class App {
     private httpServer: any
@@ -32,6 +33,10 @@ class App {
         // enable cors
         this.httpServer.use(cors());
         this.httpServer.options('*', cors());
+
+
+        this.httpServer.use(passport.initialize());
+        passport.use('jwt', passportConfig);
 
         this.httpServer.use("/", routes);
         

@@ -1,7 +1,7 @@
 import userService from "./user.service";
 import tokenService from "./token.service";
-//import authError from "../constants/apiError/auth.constant";
 import userError from "../constants/apiError/user.contant";
+import { TYPETOKEN } from "../constants/token.constant";
 
 /**
  * Use to login with user name and password
@@ -22,7 +22,17 @@ const loginWithUsernameAndPassword =  async (username : string, password: string
     return user;
 }
 
+/**
+ * Logout for user 
+ * @param refreshToken 
+ */
+const logoutAuth = async (refreshToken: string) => {
+
+    await tokenService.removeToken(refreshToken, TYPETOKEN.REFRESH);
+}
+
 
 export default {
-    loginWithUsernameAndPassword
+    loginWithUsernameAndPassword,
+    logoutAuth,
 }

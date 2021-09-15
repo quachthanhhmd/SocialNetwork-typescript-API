@@ -6,12 +6,16 @@ import validate from "../../middlewares/validate.middleware";
 
 import validateAuth from "../../validations/auth.validation";
 
+import auth from "../../middlewares/auth.middleware";
+
 const router: express.Router = express.Router();
 
 
 router.post("/signup",  validate(validateAuth.signUp), authRouter.signUp);
 
 router.post("/signin", validate(validateAuth.signIn), authRouter.signIn);
+
+router.post("/logout", auth(), validate(validateAuth.logout), authRouter.logout)
 
 
 /**
@@ -119,6 +123,34 @@ router.post("/signin", validate(validateAuth.signIn), authRouter.signIn);
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *                  
+ */
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *             example:
+ *               refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWJhYzUzNDk1NGI1NDEzOTgwNmMxMTIiLCJpYXQiOjE1ODkyOTg0ODQsImV4cCI6MTU4OTMwMDI4NH0.m1U63blB0MLej_WfB7yC2FTMnCziif9X8yzwDEfJXAg
+ *     responses:
+ *       "200":
+ *         description: Logout success
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */
 
 
