@@ -11,6 +11,7 @@ const router: express.Router = express.Router();
 
 router.post("/signup",  validate(validateAuth.signUp), authRouter.signUp);
 
+router.post("/signin", validate(validateAuth.signIn), authRouter.signIn);
 
 
 /**
@@ -77,6 +78,47 @@ router.post("/signup",  validate(validateAuth.signUp), authRouter.signUp);
  *         $ref: '#/components/responses/DuplicateUsername'
  *       "500":
  *         $ref: '#/components/responses/InternalError'
+ */ 
+ 
+
+
+/**
+ * @swagger 
+ * /auth/signin:
+ *   post:
+ *     summary: Login by username and password
+ *     tags: [Auth]
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              type: object
+ *              required: 
+ *                - username
+ *                - password
+ *              properties:
+ *                username:
+ *                  type: string 
+ *                password:
+ *                  type: string
+ *              example:
+ *                username: quachthanhhmd@gmail.com
+ *                password: thanh123
+ *  
+ *     responses:
+ *       "200":
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *                  
  */
 
 

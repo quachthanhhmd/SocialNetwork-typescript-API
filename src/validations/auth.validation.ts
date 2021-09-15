@@ -16,6 +16,14 @@ const signUp = {
     })
 };
 
+const signIn = {
+    body: Joi.object().keys({
+        username: Joi.string().required().email(),
+        password: Joi.string(),
+    }),
+}
+
 export default {
     signUp,
+    signIn
 }

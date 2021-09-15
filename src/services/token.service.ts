@@ -2,12 +2,14 @@ import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import moment, { parseTwoDigitYear } from "moment";
 
-
 import Token from "../models/token";
 import env from "../config/environments";
+
 import { ITokenAttributes, IPayload } from "../interfaces/token.interface";
 import { Op } from "sequelize";
 import { TYPETOKEN } from "../constants/token.constant";
+import  User  from "../models/user";
+
 
 /**
  * SAVE TOKEN IN DATABASE
@@ -15,8 +17,6 @@ import { TYPETOKEN } from "../constants/token.constant";
  * @returns {Promise<Token>} newToken
  */
 const storeToken = async (token: ITokenAttributes): Promise<Token> => {
-
-
 
     const newToken = await Token.create({
         token: token.token,
@@ -33,21 +33,26 @@ const storeToken = async (token: ITokenAttributes): Promise<Token> => {
  * @param {ITokenAttributes} token 
  * @returns {Promise<Token>} newToken
  */
-const generateToken = (token: ITokenAttributes): string => {
+const generateToken = (userId: number, expire: moment.Moment, type: string): string => {
 
     const payload: IPayload = {
-        sub: token.userId,
+        sub: userId,
         iat: moment().unix(),
-        exp: token.expires.unix(),
-        type: token.type,
+        exp: expire.unix(),
+        type: type,
     };
-    return jwt.sign(payload, env.TOKEN_SERCET);
+    return jwt.sign(payload, env.TOKEN.TOKEN_SERCET);
 };
 
-
+/**
+ * Verify Token
+ * @param {string} tokenName 
+ * @param {string} type 
+ * @returns {Promise<Token | null>}
+ */
 const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Promise<Token | null> => {
 
-    const payload = jwt.verify(tokenName, env.TOKEN_SERCET);
+    const payload = jwt.verify(tokenName, env.TOKEN.TOKEN_SERCET);
 
     const userId = payload.sub === undefined ? -1 : +payload.sub;
 
@@ -67,8 +72,37 @@ const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Pr
     return tokenDoc;
 }
 
+
+const generateTokenAuth = async (user: User) =>{
+
+    const tokenExpire = moment().add(env.TOKEN.TOKEN_EXPIRE_DAY, "days");
+    const generateAccessToken = generateToken(user.id, tokenExpire, TYPETOKEN.ACCESS);
+
+    const tokenRefreshExpire = moment().add(env.TOKEN.TOKEN_EXPIRE_DAY, 'days');
+    const generateRefreshExpire = generateToken(user.id, tokenRefreshExpire, TYPETOKEN.REFRESH);
+
+    await storeToken({
+        userId: user.id,
+        token: generateRefreshExpire,
+        expires: tokenRefreshExpire,
+        type: TYPETOKEN.REFRESH,
+    });
+
+    return { 
+        access: {
+            token: generateAccessToken,
+            expire: tokenExpire,
+        },
+        refresh: {
+            token: generateRefreshExpire,
+            expire: tokenRefreshExpire   
+        }
+    }
+}
+
 export default {
     storeToken,
     generateToken,
     verifyToken,
+    generateTokenAuth
 }

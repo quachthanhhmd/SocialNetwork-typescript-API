@@ -20,10 +20,6 @@ class App {
     constructor() {
         this.httpServer = express()
 
-        if (env.TYPE != "test") {
-            this.httpServer.use(morgan.successHandler);
-            this.httpServer.use(morgan.errorHandler);
-        };
 
         // parse json request body
         this.httpServer.use(express.json());
@@ -43,6 +39,9 @@ class App {
         this.httpServer.use((req: Request, res : Response, next :NextFunction) => {
             next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
         });
+
+        this.httpServer.use(morgan.successHandler);
+        this.httpServer.use(morgan.errorHandler);
     }
 
     public Start = (port: number) => {

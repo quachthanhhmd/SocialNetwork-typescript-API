@@ -8,7 +8,7 @@ import ApiError from "../utils/ApiError";
 
 export default (schema: object) => (req: Request, res: Response, next: NextFunction) =>{
 
-    console.log(req.body);
+
     const spreadSchema = pick(schema, ["params", "query", "body"]);
 
     const getObject = pick(req, Object.keys(spreadSchema)); 

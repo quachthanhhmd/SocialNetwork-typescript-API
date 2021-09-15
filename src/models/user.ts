@@ -71,8 +71,9 @@ Users.init({
     defaultValue: false,
   },
 }, {
+  tableName: "user",
   sequelize,
-  tableName: "users"
+
 });
 
 // (async function () {

@@ -12,27 +12,13 @@ import Photo from "./photos";
 import Token from "./token";
 
 
-export const associate = async () => {
+(async () => {
 
 
-    //DON'T DROP ALL TABLE IN OTHER TYPES EXCEPT DEVELOPMENT
-    if (env.TYPE === "development") {
-        await Token.drop();
-        await Photo.drop();
-        await UserBackground.drop();
-        await Comment.drop();
-        await UserPost.drop();
-        await Message.drop();
-        await Contact.drop();
-        await UserProfile.drop();
-        await UserPost.drop();
-        await UserFriend.drop();
-        await User.drop();
-    }
-
+    
     // //User with Profile
-    User.hasOne(UserProfile);
-    UserProfile.belongsTo(User);
+    User.hasOne(UserProfile, { as :"profile", sourceKey: "id", foreignKey : "userId"});
+    UserProfile.belongsTo(User, { foreignKey: "userId"});
 
     //User with token
 
@@ -83,15 +69,22 @@ export const associate = async () => {
 
 
 
-    await User.sync({ force: true });
-    await UserPost.sync({ force: true });
-    await UserProfile.sync({ force: true });
-    await Contact.sync({ force: true });
-    await Message.sync({ force: true });
-    await UserFriend.sync({ force: true });
-    await Comment.sync({ force: true });
-    await Photo.sync({ force: true });
-    await UserBackground.sync({ force: true });
-    await Token.sync({ force: true });
-}
+    
 
+
+})();
+
+
+
+export default {
+    User, 
+    UserProfile,
+    Message,
+    Contact,
+    Token,
+    Photo,
+    UserBackground,
+    UserPost,
+    UserFriend,
+    Comment,
+}

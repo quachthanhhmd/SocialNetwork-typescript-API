@@ -1,8 +1,28 @@
-import User from "../models/user";
-import userProfileService from "./userProfile.service";
+//need to use include when query
+import db from "../models/index";
 
+
+import { comparePasswordHash } from './../config/bcrypt';
+
+import userProfileService from "./userProfile.service";
 import { CreateUserProfile } from "../interfaces/user.interface";
 import UserError from "../constants/apiError/user.contant";
+
+import User from "../models/user";
+
+
+/**
+ * Check match in password
+ * @param {User} user 
+ * @param {string} password 
+ * @returns {Boolean}
+ */
+const isPasswordMatch = (user: User, password: string) =>{
+
+    if (comparePasswordHash(user.password, password)) return true;
+
+    return false;
+}
 
 /**
  * FIND USER BY ID
@@ -74,14 +94,45 @@ const createUser = async (user: createUserAttributes): Promise<User | null> => {
         userId: createUser.id,
     }
 
+    console.log(userProfile);
     userProfileService.createUserProfile(userProfile);
 
 
     return createUser;
 }
 
+
+const getInfoOfUser = async(userId: number)=> {
+
+    const userInfo = await db.User.findOne({
+    
+        where: {
+            id: userId,
+        },
+        attributes: [
+            "id",
+            "username",
+            //[sequelize.literal('"User".UserProfile""'), 'profile']
+        ],
+        include: [{
+            model: db.UserProfile,
+            as: "profile",
+            attributes: [ 'id', 'firstName', 'lastName', 'displayName', 'backgroundImage', "avtImage" , 'birthDay', 'gender'],
+        }],
+        nest: true,
+        raw: true,
+    });
+
+    if (!userInfo) throw UserError.UserNotFound;
+
+    return userInfo;
+}
+
+
 export default {
     findUserById,
     findUserbyUsername,
-    createUser
+    createUser,
+    isPasswordMatch,
+    getInfoOfUser
 }

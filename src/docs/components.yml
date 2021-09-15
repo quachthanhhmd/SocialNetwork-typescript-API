@@ -21,6 +21,17 @@ components:
             gender:
               type: string
               enum: ["male", "female", "other"]
+        access: 
+          type: object
+          properties:
+            token: string
+            expire: date
+        refresh:
+          type: Object
+          properties:
+            token: string
+            expire: date
+
       example:
         id: 1
         username: quachthanhhmd
@@ -30,7 +41,13 @@ components:
             displayName: Thanh Hai
             gender: male
             birthDay: 11/06/2000
-  
+        access:
+          - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTYzMTY5MzQ4MiwiZXhwIjoxNjMxNjkzNDgyLCJ0eXBlIjoiYWNjZXNzIn0.jLGSfGePNJgvIFvPKLpVQID6y2mZpaFKqleLdw-MiYg
+            expire: 2021-09-15T08:11:22.838Z
+        refesh:
+          - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+            expire: 2021-09-15T08:11:22.838Z
+
     Token:
       type: object
       properties:
@@ -42,7 +59,14 @@ components:
       example:
         token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWJhYzUzNDk1NGI1NDEzOTgwNmMxMTIiLCJpYXQiOjE1ODkyOTg0ODQsImV4cCI6MTU4OTMwMDI4NH0.m1U63blB0MLej_WfB7yC2FTMnCziif9X8yzwDEfJXAg
         expires: 2020-05-12T16:18:04.793Z
-
+    
+    Error:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
   responses:
     DuplicateUsername:
       description: Username already taken

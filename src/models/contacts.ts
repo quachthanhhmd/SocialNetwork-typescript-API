@@ -72,7 +72,7 @@ Contact.init({
         }
     }
 }, {
-    tableName: "contacts",
+    tableName: "contact",
     sequelize,
 })
 

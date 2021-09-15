@@ -8,8 +8,12 @@ const UsernameExist = new ApiError(httpStatus.BAD_REQUEST, "Username already tak
 
 const CreateUserFailed = new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Cannot create resource!");
 
+const LoginFailed = new ApiError(httpStatus.UNAUTHORIZED, "Incorrect username or password!");
+
+
 export default {
     UserNotFound,
     UsernameExist,
-    CreateUserFailed
+    CreateUserFailed,
+    LoginFailed
 };

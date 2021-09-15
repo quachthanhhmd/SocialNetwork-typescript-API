@@ -14,7 +14,7 @@ const envSchema: Joi.ObjectPropertiesSchema = Joi.object()
         DB_DIALECT: Joi.string().required(),
         DB_DATABASE_PORT: Joi.number().default(3306),
         TOKEN_SERCET: Joi.string().required(),
-        
+        TOKEN_EXPIRE_DAY: Joi.number().required(),
     })
     .unknown();
 
@@ -34,6 +34,9 @@ export default {
         DB_DIALECT: env.DB_DIALECT,
         DB_USERNAME: env.DB_USERNAME,
     },
-    TOKEN_SERCET: env.TOKEN_SERCET,
+    TOKEN: {
+        TOKEN_SERCET: env.TOKEN_SERCET,
+        TOKEN_EXPIRE_DAY: env.TOKEN_EXPIRE_SECOND,
+    }
 }
 

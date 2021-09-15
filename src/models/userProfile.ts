@@ -15,6 +15,7 @@ interface UserProfileAttributes {
     lastLogin?: Date | null,
     avtImage?: string | null,
     displayName?: string,
+    userId?: number
 }
 
 interface UserProfileCreationAttributes extends Optional<UserProfileAttributes, "id"> { };
@@ -31,7 +32,7 @@ class UserProfile extends Model<UserProfileCreationAttributes, UserProfileAttrib
     public birthDay!: Date;
     public lastLogin!: Date | null;
     public avtImage!: string | null;
-
+    public readonly userId!: number;
 
 
     public readonly createdAt!: Date;
@@ -88,6 +89,14 @@ UserProfile.init({
         validate: {
             isUrl: true,
         }
+    },
+    userId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+            model: 'user',
+            key: 'id',
+        },
     }
 }, {
     tableName: 'UserProfile',

@@ -10,14 +10,31 @@ export interface CreateUserProfile {
     userId: number,
 }
 
+
+/**
+ * interface to set user in local storage
+ */
 export interface IUserInfo {
 
     id: number,
     username: string,
     profile: {
+        id?: number,
         firstName: string,
         lastName: string,
-        birthDay: Date,
+        backgroundImage?: string | null,
         gender: string,
-    }  
+        birthDay: Date,
+        lastLogin?: Date | null,
+        avtImage?: string | null,
+        displayName?: string,
+    },
+    access?: {
+        token: string,
+        expire: moment.Moment,
+    }, 
+    expire?: {
+        token: string,
+        expire: moment.Moment,
+    }
 }
