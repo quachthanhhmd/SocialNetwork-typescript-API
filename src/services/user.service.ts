@@ -1,16 +1,15 @@
+import httpStatus from "http-status";
+
+import ApiError from "../utils/ApiError";
+
 //need to use include when query
 import db from "../models/index";
-
-
-import { comparePasswordHash } from './../config/bcrypt';
-
-import userProfileService from "./userProfile.service";
-import { CreateUserProfile } from "../interfaces/user.interface";
 import UserError from "../constants/apiError/user.contant";
-
+import userProfileService from "./userProfile.service";
 import User from "../models/user";
 
-import Nodemailer from "../config/nodemailer";
+import { comparePasswordHash } from './../config/bcrypt';
+import { CreateUserProfile, IUserUpdate } from "../interfaces/user.interface";
 
 
 
@@ -20,7 +19,7 @@ import Nodemailer from "../config/nodemailer";
  * @param {string} password 
  * @returns {Boolean}
  */
-const isPasswordMatch = (user: User, password: string) =>{
+const isPasswordMatch = (user: User, password: string) => {
 
     if (comparePasswordHash(user.password, password)) return true;
 
@@ -97,7 +96,7 @@ const createUser = async (user: createUserAttributes): Promise<User | null> => {
         userId: createUser.id,
     }
 
-    
+
     await userProfileService.createUserProfile(userProfile);
 
 
@@ -106,10 +105,10 @@ const createUser = async (user: createUserAttributes): Promise<User | null> => {
 }
 
 
-const getInfoOfUser = async(userId: number)=> {
+const getInfoOfUser = async (userId: number) => {
 
     const userInfo = await db.User.findOne({
-    
+
         where: {
             id: userId,
         },
@@ -121,7 +120,7 @@ const getInfoOfUser = async(userId: number)=> {
         include: [{
             model: db.UserProfile,
             as: "profile",
-            attributes: [ 'id', 'firstName', 'lastName', 'displayName', 'backgroundImage', "avtImage" , 'birthDay', 'gender'],
+            attributes: ['id', 'firstName', 'lastName', 'displayName', 'backgroundImage', "avtImage", 'birthDay', 'gender'],
         }],
         nest: true,
         raw: true,
@@ -133,10 +132,35 @@ const getInfoOfUser = async(userId: number)=> {
 }
 
 
+/**
+ * Update User table
+ * @param {number} userId 
+ * @param {IUserUpdate} updateObject
+ * @return {Promise<void>}
+ */
+const updateUser = async (userId: number, updateObject: IUserUpdate): Promise<void> => {
+
+
+    const user = await User.update(
+        updateObject,
+        {
+            where: {
+                id: userId,
+            }
+        })
+        .catch(error => {
+            throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, error);
+        })
+
+  
+}
+
+
 export default {
     findUserById,
     findUserbyUsername,
     createUser,
     isPasswordMatch,
-    getInfoOfUser
+    getInfoOfUser,
+    updateUser
 }

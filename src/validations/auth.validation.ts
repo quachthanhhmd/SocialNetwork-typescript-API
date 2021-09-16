@@ -26,11 +26,19 @@ const logout = {
     body: Joi.object().keys({
       refreshToken: Joi.string().required(),
     }),
-  };
-  
+};
+
+
+const verifyAccount = {
+    query: Joi.object().keys({
+        token: Joi.string().required(),
+    })
+}
+
 
 export default {
     signUp,
     signIn,
-    logout
+    logout,
+    verifyAccount
 }

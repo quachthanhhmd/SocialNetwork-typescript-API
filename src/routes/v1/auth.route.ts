@@ -17,6 +17,7 @@ router.post("/signin", validate(validateAuth.signIn), authRouter.signIn);
 
 router.post("/logout", auth(), validate(validateAuth.logout), authRouter.logout)
 
+router.post("/verify-email", validate(validateAuth.verifyAccount), authRouter.verifyAccount);
 
 /**
  * @swagger
@@ -153,5 +154,34 @@ router.post("/logout", auth(), validate(validateAuth.logout), authRouter.logout)
  *         $ref: '#/components/responses/NotFound'
  */
 
+
+/**
+ * @swagger
+ * /auth/verify-email:
+ *   post:
+ *     summary: Use token which has send through email to verify.
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         require: true
+ *         sechema:
+ *           type: string
+ *         description: The verify email token
+ * 
+ *     responses:
+ *       "200":
+ *         description: Verify Success!
+ *       "401":
+ *         description: verify email failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               code: 401
+ *               message: You are not authorized
+ */
+ 
 
 export default router;

@@ -9,7 +9,7 @@ import authError from "../constants/apiError/auth.constant";
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
-    host: 'smtp.gmail.com',
+    host: env.EMAIL.HOST,
     secure: false,
     auth: {
         user: env.EMAIL.USERNAME,

@@ -1,4 +1,3 @@
-import moment from "moment";
 import httpStatus from "http-status";
 import { Request, Response, NextFunction } from "express";
 
@@ -8,10 +7,10 @@ import userService from "../services/user.service";
 import authService from "../services/auth.service";
 import tokenService from "../services/token.service";
 
-import { IUserInfo } from "../interfaces/user.interface";
+import UserError from "../constants/apiError/user.contant";
 
 import env from "../config/environments";
-import authError from "../constants/apiError/auth.constant";
+import tokenError from "../constants/apiError/token.constant";
 import Nodemailer from "../config/nodemailer";
 
 import { TYPETOKEN } from "../constants/token.constant";
@@ -62,19 +61,40 @@ const logout = catchAsync( async (req: Request, res: Response) =>{
     res.status(httpStatus.OK).send("Success logout");
 })
 
+
+//Use token which has been send through email to verify account.
 const verifyAccount  = catchAsync( async (req: Request, res: Response) =>{
 
-    const {token} = req.query;
+    const token = req.query.token;
 
-    //await tokenService.verifyToken(token, TYPETOKEN.VERIFY_EMAIL);
+    if (typeof token === 'string') {
 
 
+        const userToken = await tokenService.verifyToken(token, TYPETOKEN.VERIFY_EMAIL);
 
+    
+        if (!userToken) {
+            throw tokenError.VerifyAccountNotSuccess;
+        }
+        //Check again wonder if user has been deleted in DB or not
+        const user = await userService.findUserById(userToken!.userId);
+
+        if (!user){
+            throw UserError.UserNotFound;
+        }
+
+        await userService.updateUser(userToken!.userId, {isVerified : true});
+
+        return res.status(httpStatus.OK).send("Verify success!");
+    }
+
+    //I had validation before, therefore it never exists (No check)
 })
 
 
 export default {
     signUp,
     signIn,
-    logout
+    logout,
+    verifyAccount
 }

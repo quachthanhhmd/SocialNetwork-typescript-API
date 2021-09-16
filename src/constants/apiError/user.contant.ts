@@ -10,10 +10,13 @@ const CreateUserFailed = new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Cannot 
 
 const LoginFailed = new ApiError(httpStatus.UNAUTHORIZED, "Incorrect username or password!");
 
+const ServerError = new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Server Error");
+
 
 export default {
     UserNotFound,
     UsernameExist,
     CreateUserFailed,
-    LoginFailed
+    LoginFailed,
+    ServerError
 };

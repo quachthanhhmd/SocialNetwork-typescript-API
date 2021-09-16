@@ -38,3 +38,9 @@ export interface IUserInfo {
         expire: moment.Moment,
     }
 }
+
+export interface IUserUpdate {
+
+    isVerified?: Boolean,
+    password?: string,
+}

@@ -57,7 +57,7 @@ const generateTokenVerifyEmail = async(userId: number) =>{
             userId: userId,
             token: token,
             expires: tokenExpire,
-            type: TYPETOKEN.REFRESH,
+            type: TYPETOKEN.VERIFY_EMAIL,
         });
 
     return token;
@@ -77,6 +77,7 @@ const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Pr
 
     if (userId === -1) return null;
 
+    console.log(userId, tokenName, type);
     const tokenDoc = await Token.findOne({
         where: {
             [Op.and]: [
@@ -87,7 +88,11 @@ const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Pr
         }
     });
 
+    //After verify, we need to remove it out of DB
+    //Check again
+    await removeToken(tokenName, type);
 
+   
     return tokenDoc;
 }
 
