@@ -6,9 +6,12 @@ const UnAuthenticated =  new ApiError(httpStatus.UNAUTHORIZED, "Please authetica
 
 const NotFound = new ApiError(httpStatus.NOT_FOUND, "Not found!");
 
+const SendMailFailed = new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Cannot send mail!");
+
 
 export default {
     UnAuthenticated,
     NotFound,
+    SendMailFailed,
 }
 

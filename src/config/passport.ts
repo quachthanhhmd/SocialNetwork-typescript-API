@@ -11,7 +11,7 @@ const JwtOptions = {
     jwtFromRequest: passportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
 };
 
-console.log(JwtOptions.jwtFromRequest.toString());
+
 
 const verifyToken = async(payload: any, done: passportJwt.VerifiedCallback) =>{
 
@@ -30,6 +30,7 @@ const verifyToken = async(payload: any, done: passportJwt.VerifiedCallback) =>{
         done(error, false);
     }   
 }
+
 
 const jwtStrategy: passportJwt.Strategy = new passportJwt.Strategy(JwtOptions, verifyToken);
 

@@ -5,7 +5,7 @@ import ApiError from "../constants/apiError/auth.constant";
 import Users from "../models/user";
 
 const verifyCallback = (req: Request, resolve: any, reject: any) => async (err: string, user: Users, info : any) => {
-    console.log(err, user, info);
+  
 
     if (err || info || !user)
         return reject(ApiError.UnAuthenticated);
@@ -23,7 +23,7 @@ const verifyCallback = (req: Request, resolve: any, reject: any) => async (err: 
  */
 const authenticate = () => (req: Request, res: Response, next: NextFunction) => {
 
-    console.log("Toi day roi");
+  
     return new Promise((resolve, reject) => {
         passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject))(req, res, next);
       })

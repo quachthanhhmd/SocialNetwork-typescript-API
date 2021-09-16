@@ -37,7 +37,7 @@ const storeToken = async (token: ITokenAttributes): Promise<Token> => {
  */
 const generateToken = (userId: number, expire: moment.Moment, type: string): string => {
 
-    console.log(expire.unix());
+
     const payload: IPayload = {
         sub: userId,
         iat: moment().unix(),
@@ -46,6 +46,22 @@ const generateToken = (userId: number, expire: moment.Moment, type: string): str
     };
     return jwt.sign(payload, env.TOKEN.TOKEN_SERCET);
 };
+
+const generateTokenVerifyEmail = async(userId: number) =>{
+
+    const tokenExpire : moment.Moment = moment().add(env.TOKEN.TOKEN_EXPIRE_MINUTES, "minutes");
+
+    const token = generateToken(userId, tokenExpire, TYPETOKEN.VERIFY_EMAIL);
+
+    await storeToken({
+            userId: userId,
+            token: token,
+            expires: tokenExpire,
+            type: TYPETOKEN.REFRESH,
+        });
+
+    return token;
+}
 
 /**
  * Verify Token
@@ -126,4 +142,5 @@ export default {
     verifyToken,
     generateTokenAuth,
     removeToken,
+    generateTokenVerifyEmail,
 }

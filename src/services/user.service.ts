@@ -10,7 +10,7 @@ import UserError from "../constants/apiError/user.contant";
 
 import User from "../models/user";
 
-
+import Nodemailer from "../config/nodemailer";
 
 
 
@@ -97,8 +97,9 @@ const createUser = async (user: createUserAttributes): Promise<User | null> => {
         userId: createUser.id,
     }
 
-    console.log(userProfile);
-    userProfileService.createUserProfile(userProfile);
+    
+    await userProfileService.createUserProfile(userProfile);
+
 
 
     return createUser;
