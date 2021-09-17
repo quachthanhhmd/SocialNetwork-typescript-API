@@ -49,11 +49,11 @@ const generateToken = (userId: number, expire: moment.Moment, type: string): str
 
 
 /**
- * Generate token to verify email
+ * Generate token to verify email or forgot password
  * @param {numbser} userId 
  * @returns {Promise<string>} token after generating
  */
-const generateTokenVerifyEmail = async(userId: number): Promise<string> =>{
+const generateTokenVerify = async(userId: number, type: string): Promise<string> =>{
 
     //before generateToken we need to remove token has been send before
     
@@ -61,13 +61,13 @@ const generateTokenVerifyEmail = async(userId: number): Promise<string> =>{
 
     const tokenExpire : moment.Moment = moment().add(env.TOKEN.TOKEN_EXPIRE_MINUTES, "minutes");
 
-    const token = generateToken(userId, tokenExpire, TYPETOKEN.VERIFY_EMAIL);
+    const token = generateToken(userId, tokenExpire, type);
 
     await storeToken({
             userId: userId,
             token: token,
             expires: tokenExpire,
-            type: TYPETOKEN.VERIFY_EMAIL,
+            type: type,
         });
 
     return token;
@@ -79,7 +79,8 @@ const generateTokenVerifyEmail = async(userId: number): Promise<string> =>{
  * @param {string} type 
  * @returns {Promise<Token | null>}
  */
-const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Promise<Token | null> => {
+const verifyToken = async (tokenName: string, type : string): Promise<Token> => {
+
 
     const payload = jwt.verify(tokenName, env.TOKEN.TOKEN_SERCET);
 
@@ -123,7 +124,7 @@ const generateTokenAuth = async (userId: number) =>{
     const tokenRefreshExpire = moment().add(env.TOKEN.TOKEN_EXPIRE_DAY, 'days');
     const generateRefreshExpire = generateToken(userId, tokenRefreshExpire, TYPETOKEN.REFRESH);
 
-    
+
 
     await storeToken({
         userId: userId,
@@ -179,12 +180,13 @@ const removeTokenByUserId = async (userId: number, type: string)  :Promise<void>
     })
 }
 
+
 export default {
     storeToken,
     generateToken,
     verifyToken,
     generateTokenAuth,
     removeToken,
-    generateTokenVerifyEmail,
+    generateTokenVerify,
     removeTokenByUserId
 }

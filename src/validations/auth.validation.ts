@@ -41,11 +41,20 @@ const refreshToken = {
     })
 }
 
+const forgotPassword = {
+    body: Joi.object().keys({
+        username: Joi.string().required().email(),
+    })
+}
+
+
+
 
 export default {
     signUp,
     signIn,
     logout,
     verifyAccount,
-    refreshToken
+    refreshToken,
+    forgotPassword
 }

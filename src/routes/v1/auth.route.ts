@@ -23,6 +23,10 @@ router.post("/send-again-verify-email", auth(), authRouter.sendEmailVerifyAgain)
 
 router.post("/refresh-token", validate(validateAuth.refreshToken), authRouter.refreshToken);
 
+router.post("/forgot-password", validate(validateAuth.forgotPassword) ,authRouter.forgotPassword);
+
+router.post("/reset-password", authRouter.resetPassword);
+
 /**
  * @swagger
  * tags:
@@ -236,5 +240,82 @@ router.post("/refresh-token", validate(validateAuth.refreshToken), authRouter.re
  *                
  */
 
+/**
+ * @swagger
+ * /auth/forgot-password: 
+ *   post:
+ *     summary: forgot password
+ *     description: post token to reset password through email.
+ *     tags: [Auth]
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: 
+ *               - username 
+ *             properties:
+ *               username: 
+ *                 type: string 
+ *                 format: email
+ *             example: 
+ *               username: quachthanhhmd@gmail.com
+ * 
+ *     responses:
+ *       "200":
+ *         description: generate token sucess
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code: 
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *               example:
+ *                 code: 200
+ *                 message: generate token sucess
+ *       "404":
+ *          $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /auth/reset-password:
+ *   post:
+ *     summary: reset password by token
+ *     description: using token has been send through email and password inputed by user to reset password
+ *     tags: [Auth]
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:        
+ *               - resetToken
+ *               - password
+ *             properties:
+ *               resetToken: 
+ *                 type: string
+ *               password: 
+ *                 type: string 
+ *             example:
+ *               resetToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyLCJpYXQiOjE2MzE4NzE4MDQsImV4cCI6MTYzMTg3NTQwNCwidHlwZSI6InJlc2V0UGFzc3dvcmQifQ.ivzk8PNK78W658u9S7_ZkcCaWmwerDOyoJ45qGvznGU
+ *               password: thanhdeptrai123
+ * 
+ *     responses:
+ *       "200":
+ *         description: generate token sucess
+ *         content: Reset password success
+ * 
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ * 
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
 
 export default router;

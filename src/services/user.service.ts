@@ -155,6 +155,23 @@ const updateUser = async (userId: number, updateObject: IUserUpdate): Promise<vo
   
 }
 
+/**
+ * Change password by userId  
+ * @param {number} userId 
+ * @param {string} password 
+ * @return {Promise<void>}
+ */
+const ChangePasswordById = async (userId :number, password: string) : Promise<void> =>{
+
+    await User.update(
+        {password: password},
+        {
+            where: {
+                id: userId,
+            }
+        }
+    )
+}
 
 export default {
     findUserById,
@@ -162,5 +179,6 @@ export default {
     createUser,
     isPasswordMatch,
     getInfoOfUser,
-    updateUser
+    updateUser,
+    ChangePasswordById
 }
