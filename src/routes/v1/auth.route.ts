@@ -19,6 +19,8 @@ router.post("/logout", auth(), validate(validateAuth.logout), authRouter.logout)
 
 router.post("/verify-email", validate(validateAuth.verifyAccount), authRouter.verifyAccount);
 
+router.post("/send-again-verify-email", auth(), authRouter.sendEmailVerifyAgain);
+
 /**
  * @swagger
  * tags:
@@ -186,6 +188,23 @@ router.post("/verify-email", validate(validateAuth.verifyAccount), authRouter.ve
  *               code: 401
  *               message: You are not authorized
  */
- 
+
+
+ /**
+ * @swagger
+ * /auth/send-again-verify-email:
+ *   post:
+ *     summary: Send verification email again
+ *     description: Email will be send again when user didn't receive email before.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: Send email verify success
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ */
+
 
 export default router;

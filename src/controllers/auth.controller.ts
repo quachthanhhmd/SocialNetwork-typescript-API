@@ -14,19 +14,26 @@ import tokenError from "../constants/apiError/token.constant";
 import Nodemailer from "../config/nodemailer";
 
 import { TYPETOKEN } from "../constants/token.constant";
+import { IUser } from './../interfaces/user.interface';
+
+//Declare interface 
+interface RequestWithUser extends Request {
+    user: IUser;
+}
+
 
 const signUp = catchAsync(async (req: Request, res: Response) => {
 
 
     const user = await userService.createUser(req.body);
 
-  
-    const token: string = await tokenService.generateTokenVerifyEmail(user!.id);
+    const tokens: object = await tokenService.generateTokenAuth(user!);
+    const tokenVerifyEmail: string = await tokenService.generateTokenVerifyEmail(user!.id);
 
 
-    await Nodemailer.sendMailVerify(req, user!.username, token);
+    await Nodemailer.sendMailVerify(req, user!.username, tokenVerifyEmail);
 
-    return res.status(httpStatus.CREATED).send({ user, token });
+    return res.status(httpStatus.CREATED).send({ user, tokens });
 });
 
 
@@ -92,9 +99,27 @@ const verifyAccount  = catchAsync( async (req: Request, res: Response) =>{
 })
 
 
+
+
+//Send verify email again
+//When register, you need to save user in req 
+const sendEmailVerifyAgain = catchAsync( async (req: RequestWithUser, res: Response) =>{
+
+    const user: IUser  = req.user;
+
+    if (!user) throw UserError.UserNotFound;
+
+    const generateTokenVerifyEmail = await tokenService.generateTokenVerifyEmail(user!.id);
+
+    await Nodemailer.sendMailVerify(req, user!.username, generateTokenVerifyEmail);
+
+    res.status(httpStatus.OK).send("Send email verify success");
+})
+
 export default {
     signUp,
     signIn,
     logout,
-    verifyAccount
+    verifyAccount,
+    sendEmailVerifyAgain
 }

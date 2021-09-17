@@ -44,3 +44,11 @@ export interface IUserUpdate {
     isVerified?: Boolean,
     password?: string,
 }
+
+export interface IUser {
+
+    id: number,
+    password: string,
+    isVerified: string,
+    username: string,
+}

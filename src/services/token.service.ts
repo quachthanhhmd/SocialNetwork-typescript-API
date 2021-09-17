@@ -47,7 +47,17 @@ const generateToken = (userId: number, expire: moment.Moment, type: string): str
     return jwt.sign(payload, env.TOKEN.TOKEN_SERCET);
 };
 
-const generateTokenVerifyEmail = async(userId: number) =>{
+
+/**
+ * Generate token to verify email
+ * @param {numbser} userId 
+ * @returns {Promise<string>} token after generating
+ */
+const generateTokenVerifyEmail = async(userId: number): Promise<string> =>{
+
+    //before generateToken we need to remove token has been send before
+    
+    await removeTokenByUserId(userId, TYPETOKEN.VERIFY_EMAIL);
 
     const tokenExpire : moment.Moment = moment().add(env.TOKEN.TOKEN_EXPIRE_MINUTES, "minutes");
 
@@ -77,7 +87,7 @@ const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Pr
 
     if (userId === -1) return null;
 
-    console.log(userId, tokenName, type);
+
     const tokenDoc = await Token.findOne({
         where: {
             [Op.and]: [
@@ -127,8 +137,13 @@ const generateTokenAuth = async (user: User) =>{
         }
     }
 }
-
-const removeToken = async (token: string, type: string) =>{
+/**
+ * REMOVE TOKEN BY TOKEN AND TYPE
+ * @param {string} token 
+ * @param {string} type
+ * @return {Promise<void>} 
+ */
+const removeToken = async (token: string, type: string) : Promise<void> =>{
 
 
     await Token.destroy( {
@@ -140,6 +155,23 @@ const removeToken = async (token: string, type: string) =>{
     }});
 }
 
+/**
+ * Remove token by User Id and type
+ * @param {number} userId 
+ * @param {string} type 
+ * @return {Promise<void>}
+ */
+const removeTokenByUserId = async (userId: number, type: string)  :Promise<void> =>{
+
+    await Token.destroy({ 
+        where: {
+            [Op.and]: {
+                userId: userId,
+                type: type,
+            }
+        }
+    })
+}
 
 export default {
     storeToken,
@@ -148,4 +180,5 @@ export default {
     generateTokenAuth,
     removeToken,
     generateTokenVerifyEmail,
+    removeTokenByUserId
 }
