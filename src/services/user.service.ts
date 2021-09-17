@@ -9,8 +9,9 @@ import userProfileService from "./userProfile.service";
 import User from "../models/user";
 
 import { comparePasswordHash } from './../config/bcrypt';
-import { CreateUserProfile, IUserUpdate } from "../interfaces/user.interface";
 
+import { CreateUserProfile, IUserUpdate } from "../interfaces/user.interface";
+import {IAllInfoUser} from "../interfaces/user.interface";
 
 
 /**
@@ -173,6 +174,58 @@ const ChangePasswordById = async (userId :number, password: string) : Promise<vo
     )
 }
 
+/**
+ * Get all information of a user
+ * @param userId 
+ */
+const getFullUserInfo = async (userId : number) : Promise<User | null> => {
+
+    
+    //let fullInfoUser:IAllInfoUser = {};
+    const userInfo = await db.User.findOne({
+        where: {
+            id: userId,
+        },
+        attributes: [
+            "id",
+            "username",
+            //[sequelize.literal('"User".UserProfile""'), 'profile']
+        ],
+        include: [{
+            model: db.UserProfile,
+            as: "profile",
+            attributes: ['id', 'firstName', 'lastName', 'displayName', 'backgroundImage', "avtImage", 'birthDay', 'gender'],
+            required: false
+        },{
+            model: db.Contact,
+            as: "contacts",
+            attributes: ['email', 'phoneNumber', 'skype', 'github', 'linkedin'],
+            required: false
+        },{
+            model: db.UserPost,
+            as: "posts",
+            required: false
+        }, {
+            model: db.UserFriend,
+            as: "friends",
+            attributes: ['id'],
+            required: false
+        }, {
+            model: db.UserBackground,
+            as: "backgrounds",
+            attributes: ['id', 'status', 'link', 'type', 'name'],
+            required: false
+        }],
+        nest: true,
+        raw: true,
+    });
+
+    console.log(userInfo);
+
+    return userInfo;
+}
+
+
 export default {
     findUserById,
     findUserbyUsername,
@@ -180,5 +233,6 @@ export default {
     isPasswordMatch,
     getInfoOfUser,
     updateUser,
-    ChangePasswordById
+    ChangePasswordById,
+    getFullUserInfo
 }
