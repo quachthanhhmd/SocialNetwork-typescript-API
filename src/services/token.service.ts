@@ -10,7 +10,7 @@ import { Op } from "sequelize";
 import { TYPETOKEN } from "../constants/token.constant";
 
 
-import  User  from "../models/user";
+import tokenError from "../constants/apiError/token.constant";
 import authError from "../constants/apiError/auth.constant";
 
 /**
@@ -83,9 +83,10 @@ const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Pr
 
     const payload = jwt.verify(tokenName, env.TOKEN.TOKEN_SERCET);
 
+    console.log(payload);
     const userId = payload.sub === undefined ? -1 : +payload.sub;
 
-    if (userId === -1) return null;
+    if (userId === -1)  throw authError.UnAuthenticated;
 
 
     const tokenDoc = await Token.findOne({
@@ -98,6 +99,9 @@ const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Pr
         }
     });
 
+    if (!tokenDoc)
+        throw tokenError.TokenNotFound;
+
     //After verify, we need to remove it out of DB
     //Check again
     await removeToken(tokenName, type);
@@ -109,18 +113,20 @@ const verifyToken = async (tokenName: string, type = TYPETOKEN.VERIFY_EMAIL): Pr
 /**
  * generate token to authenticate
  * @param {User} user 
- * @returns {Project<Object>} access and fresh token
+ * @returns {<Promise<Object>} access and fresh token
  */
-const generateTokenAuth = async (user: User) =>{
+const generateTokenAuth = async (userId: number) =>{
 
     const tokenExpire = moment().add(env.TOKEN.TOKEN_EXPIRE_MINUTES, "minutes");
-    const generateAccessToken = generateToken(user.id, tokenExpire, TYPETOKEN.ACCESS);
+    const generateAccessToken = generateToken(userId, tokenExpire, TYPETOKEN.ACCESS);
 
     const tokenRefreshExpire = moment().add(env.TOKEN.TOKEN_EXPIRE_DAY, 'days');
-    const generateRefreshExpire = generateToken(user.id, tokenRefreshExpire, TYPETOKEN.REFRESH);
+    const generateRefreshExpire = generateToken(userId, tokenRefreshExpire, TYPETOKEN.REFRESH);
+
+    
 
     await storeToken({
-        userId: user.id,
+        userId: userId,
         token: generateRefreshExpire,
         expires: tokenRefreshExpire,
         type: TYPETOKEN.REFRESH,

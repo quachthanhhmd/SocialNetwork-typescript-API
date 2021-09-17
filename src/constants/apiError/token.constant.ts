@@ -6,7 +6,11 @@ const InvalidRequestTokenError = new ApiError(httpStatus.FORBIDDEN, "Invalid req
 
 const VerifyAccountNotSuccess =  new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized");
 
+const TokenNotFound = new ApiError(httpStatus.NOT_FOUND, "Token not found!");
+
+
 export default {
     InvalidRequestTokenError,
-    VerifyAccountNotSuccess
+    VerifyAccountNotSuccess,
+    TokenNotFound,
 }

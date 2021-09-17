@@ -35,10 +35,17 @@ const verifyAccount = {
     })
 }
 
+const refreshToken = {
+    body: Joi.object().keys({
+        refreshToken: Joi.string().required(),
+    })
+}
+
 
 export default {
     signUp,
     signIn,
     logout,
-    verifyAccount
+    verifyAccount,
+    refreshToken
 }

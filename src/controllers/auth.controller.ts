@@ -27,7 +27,7 @@ const signUp = catchAsync(async (req: Request, res: Response) => {
 
     const user = await userService.createUser(req.body);
 
-    const tokens: object = await tokenService.generateTokenAuth(user!);
+    const tokens: object = await tokenService.generateTokenAuth(user!.id);
     const tokenVerifyEmail: string = await tokenService.generateTokenVerifyEmail(user!.id);
 
 
@@ -48,7 +48,7 @@ const signIn = catchAsync( async (req: Request, res: Response) =>{
 
     const userInfo  = await userService.getInfoOfUser(user.id);
 
-    const tokenCreate = await tokenService.generateTokenAuth(userInfo);
+    const tokenCreate = await tokenService.generateTokenAuth(userInfo.id);
     
     return res.status(httpStatus.CREATED).send({user: userInfo, token: tokenCreate});
 })
@@ -79,9 +79,9 @@ const verifyAccount  = catchAsync( async (req: Request, res: Response) =>{
 
         const userToken = await tokenService.verifyToken(token, TYPETOKEN.VERIFY_EMAIL);
 
-    
+        
         if (!userToken) {
-            throw tokenError.VerifyAccountNotSuccess;
+            throw tokenError.VerifyAccountNotSuccess;        
         }
         //Check again wonder if user has been deleted in DB or not
         const user = await userService.findUserById(userToken!.userId);
@@ -116,10 +116,29 @@ const sendEmailVerifyAgain = catchAsync( async (req: RequestWithUser, res: Respo
     res.status(httpStatus.OK).send("Send email verify success");
 })
 
+
+
+//refresh token
+const refreshToken = catchAsync( async (req: Request, res: Response) =>{
+
+    const refreshToken: string  = req.body.refreshToken;
+
+    const token = await tokenService.verifyToken(refreshToken, TYPETOKEN.REFRESH);
+
+    //generate new token
+    const newToken = await tokenService.generateTokenAuth(token!.userId);
+
+    //await tokenService.removeToken(refreshToken, TYPETOKEN.REFRESH);
+
+    return res.status(httpStatus.OK).send(newToken);
+})
+
+
 export default {
     signUp,
     signIn,
     logout,
     verifyAccount,
-    sendEmailVerifyAgain
+    sendEmailVerifyAgain,
+    refreshToken
 }

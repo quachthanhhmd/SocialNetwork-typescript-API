@@ -21,6 +21,8 @@ router.post("/verify-email", validate(validateAuth.verifyAccount), authRouter.ve
 
 router.post("/send-again-verify-email", auth(), authRouter.sendEmailVerifyAgain);
 
+router.post("/refresh-token", validate(validateAuth.refreshToken), authRouter.refreshToken);
+
 /**
  * @swagger
  * tags:
@@ -204,6 +206,34 @@ router.post("/send-again-verify-email", auth(), authRouter.sendEmailVerifyAgain)
  *         description: Send email verify success
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
+ */
+
+/**
+ * @swagger
+ * /auth/refresh-token:
+ *   post:
+ *     summary: Refresh Token 
+ *     tags: [Auth]
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string 
+ *             example: 
+ *               refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+ *     responses:
+ *       "200":
+ *         description: Refresh token success
+ *         $ref: '#/components/Token'
+ *       "401":
+ *          $ref: '#/components/responses/Unauthorized'
+ *                
  */
 
 

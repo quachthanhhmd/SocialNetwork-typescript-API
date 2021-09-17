@@ -41,7 +41,7 @@ export default {
     },
     TOKEN: {
         TOKEN_SERCET: env.TOKEN_SERCET,
-        TOKEN_EXPIRE_DAY: env.TOKEN_EXPIRE_SECOND,
+        TOKEN_EXPIRE_DAY: env.TOKEN_EXPIRE_DAY,
         TOKEN_EXPIRE_MINUTES: env.TOKEN_EXPIRE_MINUTES
     },
     EMAIL:{
