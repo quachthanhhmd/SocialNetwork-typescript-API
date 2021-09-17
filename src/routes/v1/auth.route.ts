@@ -207,7 +207,12 @@ router.post("/reset-password", authRouter.resetPassword);
  *       - bearerAuth: []
  *     responses:
  *       "200":
- *         description: Send email verify success
+ *         description: return when sending email verify success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: Send email verify success
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
@@ -308,8 +313,12 @@ router.post("/reset-password", authRouter.resetPassword);
  * 
  *     responses:
  *       "200":
- *         description: generate token sucess
- *         content: Reset password success
+ *         description: return when reset pasword success and pasword will be saved in DB
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: Reset password success
  * 
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
