@@ -1,13 +1,14 @@
 import express from "express";
 import userRouter from "../../controllers/user.controller";
 
+import multer from "../../config/multer";
 
 const router: express.Router = express.Router();
 
 
 
 router.get('/:id', userRouter.getOneUser);
-
+router.patch('/:id', userRouter.updateUser);
 
 export default router;
 
@@ -61,7 +62,8 @@ export default router;
  *                     avtImage:
  *                       type: string 
  *                     birthDay:
- *                       type: date
+ *                       type: string
+ *                       format: date
  *                     gender:
  *                       type: string 
  *                       enum: [male, female, other]
@@ -128,7 +130,7 @@ export default router;
  *                   displayName: Thanh Quach
  *                   backgroundImage: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCVbARnH-7g5hQ1HKBH3roPQE4WekAJYjqsg&usqp=CAU
  *                   avtImage: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCVbARnH-7g5hQ1HKBH3roPQE4WekAJYjqsg&usqp=CAU
- *                   birthDay: 11/06/2000 
+ *                   birthDay: 2000-06-11
  *                   gender: male 
  *                   contacts:
  *                     email: quachthanhhmd@gmail.com   
@@ -168,7 +170,7 @@ export default router;
  *     requestBody:
  *       require: true
  *       content:
- *         application/json: 
+ *         application/json:
  *           schema: 
  *             type: object 
  *             properties: 
@@ -177,14 +179,17 @@ export default router;
  *               lastName:
  *                 type: string 
  *               birthDay:  
- *                 type: date
+ *                 type: string
+ *                 format: date
  *               gender: 
  *                 type: string 
  *                 enum: [male, female, other]
  *               avtImage: 
  *                 type: string
+ *                 format: binary
  *               backgroundImage: 
  *                 type: string
+ *                 format: binary
  *               email: 
  *                 type: string
  *               github:
@@ -218,7 +223,7 @@ export default router;
  *               example: Update success
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- *       "500"
+ *       "500":
  *         $ref: '#/components/responses/InternalError'
  *            
  */

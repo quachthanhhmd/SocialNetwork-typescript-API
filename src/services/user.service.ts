@@ -4,14 +4,18 @@ import ApiError from "../utils/ApiError";
 
 //need to use include when query
 import db from "../models/index";
+
 import UserError from "../constants/apiError/user.contant";
 import userProfileService from "./userProfile.service";
+import contactService from "./contact.service";
 import User from "../models/user";
 
 import { comparePasswordHash } from './../config/bcrypt';
 
-import { CreateUserProfile, IUserUpdate } from "../interfaces/user.interface";
+import { CreateUserProfile, IUserUpdate, IUserProfileUpdate } from "../interfaces/user.interface";
 import { IAllInfoUser } from "../interfaces/user.interface";
+
+
 
 
 /**
@@ -142,7 +146,7 @@ const getInfoOfUser = async (userId: number) => {
 const updateUser = async (userId: number, updateObject: IUserUpdate): Promise<void> => {
 
 
-    const user = await User.update(
+   await User.update(
         updateObject,
         {
             where: {
@@ -250,6 +254,22 @@ const getFullUserInfo = async (userId: number): Promise<User | null> => {
 }
 
 
+const updateAllInformation = async(id: number, updateBody: IUserProfileUpdate) =>{
+
+    
+    //update contacts
+    await userProfileService.updateProfileById(id, updateBody);
+
+    // find this profile;
+    const profile = await userProfileService.findProfileByUserId(id);
+
+    if (!profile) throw UserError.UserNotFound;
+
+    console.log(profile);
+    await contactService.updateContactByProfileId(profile.id, updateBody);
+   
+}
+
 export default {
     findUserById,
     findUserbyUsername,
@@ -258,5 +278,6 @@ export default {
     getInfoOfUser,
     updateUser,
     ChangePasswordById,
-    getFullUserInfo
+    getFullUserInfo,
+    updateAllInformation
 }

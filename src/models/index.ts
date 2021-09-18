@@ -29,8 +29,8 @@ import Token from "./token";
     Token.belongsTo(User, { foreignKey: "userId", });
 
     //User Profile and contacts
-    UserProfile.hasOne(Contact, {as : "contacts"});
-    Contact.belongsTo(UserProfile);
+    UserProfile.hasOne(Contact, {as : "contacts", foreignKey: "profileId"});
+    Contact.belongsTo(UserProfile, {foreignKey: "profileId"});
 
     //User  with friends
     //I use one-to-many associate since I want to create a realationship between ONE User who can have multiple friends.

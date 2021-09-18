@@ -57,7 +57,7 @@ const generateTokenVerify = async(userId: number, type: string): Promise<string>
 
     //before generateToken we need to remove token has been send before
     
-    await removeTokenByUserId(userId, TYPETOKEN.VERIFY_EMAIL);
+    await removeTokenByUserId(userId, type);
 
     const tokenExpire : moment.Moment = moment().add(env.TOKEN.TOKEN_EXPIRE_MINUTES, "minutes");
 
@@ -84,7 +84,7 @@ const verifyToken = async (tokenName: string, type : string): Promise<Token> => 
 
     const payload = jwt.verify(tokenName, env.TOKEN.TOKEN_SERCET);
 
-    console.log(payload);
+
     const userId = payload.sub === undefined ? -1 : +payload.sub;
 
     if (userId === -1)  throw authError.UnAuthenticated;

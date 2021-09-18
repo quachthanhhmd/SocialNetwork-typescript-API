@@ -72,6 +72,12 @@ UserProfile.init({
     birthDay: {
         type: DataTypes.DATEONLY,
         allowNull: false,
+        set(value: string | Date){
+            if (typeof value === "string")
+                this.setDataValue("birthDay", new Date(value));
+            else
+                this.setDataValue("birthDay", value);
+        },
         validate: {
             isBefore: new Date().toLocaleDateString(),
         }
@@ -99,7 +105,7 @@ UserProfile.init({
         },
     }
 }, {
-    tableName: 'UserProfile',
+    tableName: 'userprofile',
     sequelize,
 })
 

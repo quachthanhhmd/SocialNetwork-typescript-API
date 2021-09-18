@@ -76,3 +76,16 @@ export interface IAllInfoUser extends IUserInfoSummary {
     friends: Array<IFriendSummary>
     backgrounds: Array<IBackgroundSummary>
 }
+
+export interface IUserProfileUpdate {
+
+    firstName?: string,
+    lastName?: string,
+    birthDay?: Date,
+    gender?: string,
+    email?: string,
+    phoneNumber?:string,
+    github?: string,
+    linkedin?: string,
+    skype?: string,
+}
