@@ -21,6 +21,8 @@ const getOneUser = catchAsync( async (req: Request, res: Response) =>{
     res.status(httpStatus.OK).send(user);
 })
 
+//update information of user 
+
 export default {
     getOneUser
 }
