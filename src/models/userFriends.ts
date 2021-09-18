@@ -3,6 +3,8 @@ import { sequelize } from "../config/sequelize";
 
 interface UserFriendAttributes {
     id?: number;
+    friendId: number,
+    userId: number,
     accepted: Boolean;
     isFollow: Boolean;
 }
@@ -12,8 +14,12 @@ interface UserFriendCreationAttributes extends Optional<UserFriendAttributes, "i
 class UserFriends extends Model<UserFriendCreationAttributes, UserFriendAttributes>
     implements UserFriendAttributes {
     public readonly id!: number;
+    public friendId!: number;
+    public userId!: number;
     public accepted!: Boolean;
     public isFollow!: Boolean;
+
+    
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
@@ -31,6 +37,22 @@ UserFriends.init({
     isFollow: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+    },
+    friendId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+            model: 'user',
+            key: 'id',
+        },
+    },
+    userId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+            model: 'user',
+            key: 'id',
+        },
     }
 }, {
     tableName: "userfriends",

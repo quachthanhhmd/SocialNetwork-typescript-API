@@ -34,8 +34,11 @@ import Token from "./token";
 
     //User  with friends
     //I use one-to-many associate since I want to create a realationship between ONE User who can have multiple friends.
-    User.hasMany(UserFriend, {as: "friends"});
-    UserFriend.belongsTo(User);
+    User.hasMany(UserFriend, { foreignKey: "userId", as: "friends"});
+    UserFriend.belongsTo(User,  { foreignKey: "userId",});
+
+    User.hasMany(UserFriend, { foreignKey: "friendId"})
+    UserFriend.belongsTo(User, { foreignKey: "friendId"});
 
     //User with Posts
     User.hasMany(UserPost, {as: "posts"});
@@ -46,7 +49,7 @@ import Token from "./token";
     UserPost.hasMany(Comment, {as: "commets"});
     Comment.belongsTo(UserPost);
 
-    User.hasMany(UserBackground);
+    User.hasMany(UserBackground, {as :"backgrounds"});
     UserBackground.belongsTo(User);
 
     //User with messages
