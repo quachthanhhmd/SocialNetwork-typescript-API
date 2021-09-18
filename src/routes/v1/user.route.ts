@@ -154,6 +154,72 @@ export default router;
  *       "404":
  *          desciption: user not found
  *          $ref: '#/components/responses/NotFound'           
- *                  
+ *     
+ *   patch: 
+ *     summary: Update user information
+ *     desciption: update user information
+ *     tags: [User]
+ *     parameters:
+ *       - in: path 
+ *         name: id 
+ *         schema: 
+ *           type: number 
+ *           required: true  
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         application/json: 
+ *           schema: 
+ *             type: object 
+ *             properties: 
+ *               firstName:    
+ *                 type: string 
+ *               lastName:
+ *                 type: string 
+ *               birthDay:  
+ *                 type: date
+ *               gender: 
+ *                 type: string 
+ *                 enum: [male, female, other]
+ *               avtImage: 
+ *                 type: string
+ *               backgroundImage: 
+ *                 type: string
+ *               email: 
+ *                 type: string
+ *               github:
+ *                 type: string 
+ *               phoneNumber:
+ *                 type: string 
+ *               skype: 
+ *                 type: string 
+ *               linkedin:  
+ *                 type: string 
+ *             example:
+ *               firstName: Hai
+ *               lastName: Thanh
+ *               birthDay: 06/11/2000
+ *               gender: male
+ *               avtImage: https://i.ytimg.com/vi/XHEqQoOqyVY/hqdefault.jpg
+ *               backgroundImage: https://i.ytimg.com/vi/XHEqQoOqyVY/hqdefault.jpg
+ *               email: quachthanhhmd@gmail.com 
+ *               phoneNumber: "0846088201"
+ *               skype: https://www.linkedin.com/in/thanh-quach-hai-1a4959190/
+ *               github: https://github.com/quachthanhhmd
+ *               linkedin: https://www.linkedin.com/in/thanh-quach-hai-1a4959190/
+ *     
+ *     responses:
+ *       "200":
+ *         description: Update success 
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               type: string 
+ *               example: Update success
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *       "500"
+ *         $ref: '#/components/responses/InternalError'
+ *            
  */
 
