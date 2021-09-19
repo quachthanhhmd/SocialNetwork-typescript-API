@@ -303,6 +303,21 @@ const sendRequestFriend = async (userId: number, parnerId: number) : Promise<voi
     await friendService.sendRequestFriend(userId, parnerId);
 }
 
+/**
+ * user who has been received a request will accept to become friends each other.
+ * @param {number} userId 
+ * @param {number} parnerId
+ * @return {Promise<void>} 
+ */
+const acceptRequetFriend = async (userId: number, parnerId: number) : Promise<void> => {
+
+    const parner = findUserById(parnerId);
+
+    if (!parner) throw UserError.UserNotFound;
+
+    await friendService.acceptRequestFriend(userId, parnerId);
+}
+
 export default {
     findUserById,
     findUserbyUsername,
@@ -314,5 +329,6 @@ export default {
     getFullUserInfo,
     updateAllInformation,
     updateImageUser,
-    sendRequestFriend
+    sendRequestFriend,
+    acceptRequetFriend,
 }

@@ -18,7 +18,7 @@ router.put('/avatar/:id', auth(), validate(userValidation.updateAvt), multer.ima
 router.put('/background-image/:id', auth(), validate(userValidation.updateBackgroundImage), multer.imageUpload.single('backgroundImage'), userRouter.updateBackgroundImage);
 
 router.post('/request-friend/:id', auth(), validate(userValidation.requestFriend), userRouter.sendRequestFriend);
-
+router.post('/accept-friend/:id', auth(), validate(userValidation.acceptFriend), userRouter.accpetFriend);
 
 export default router;
 
@@ -311,6 +311,33 @@ export default router;
  * /users/request-friend/{id}:
  *   post:
  *     summary: request other users to become a friend
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: id 
+ *         schema: 
+ *           type: number 
+ *           required: true
+ *     responses:
+ *       "200": 
+ *          description: NO CONTENT 
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *          $ref: '#/components/responses/NotFound'
+ *          
+ */
+
+
+/**
+ * @swagger
+ * /users/accept-friend/{id}:
+ *   post:
+ *     summary: accept other user sent request before to become a friend
  *     tags: [User]
  *     security:
  *       - bearerAuth: []

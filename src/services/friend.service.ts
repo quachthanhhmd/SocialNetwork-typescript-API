@@ -57,6 +57,13 @@ const acceptRequestFriend = async (userId: number, parnerId: number): Promise<vo
 
     const relationship : Friend | null = await findFriendById(userId, parnerId);
 
+    //realationship can not be null since it muse be send a request befor
+    if (!relationship) throw FriendError.FriendNotFound;
+
+    //userId muse be different with userId because it will be definite that user is not self-acceptable
+    if (relationship.userId === userId)
+        throw FriendError.UnSelfAccept;
+
     if (relationship && relationship.isAccepted) throw FriendError.FriendExist;
 
     Friend.update({

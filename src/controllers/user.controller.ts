@@ -76,11 +76,21 @@ const sendRequestFriend = catchAsync(async (req: ReuqestWithUser, res: Response)
     return res.status(httpStatus.CREATED).send({});
 })
 
+const accpetFriend = catchAsync(async (req: ReuqestWithUser, res: Response) => {
+
+    const userId =  req.user!.id;
+    const friendId = +req.params.id;
+
+    await userService.acceptRequetFriend(userId, friendId);
+
+    res.status(httpStatus.CREATED).send({});
+})
 
 export default {
     getOneUser,
     updateUser,
     updateAvt,
     updateBackgroundImage,
-    sendRequestFriend
+    sendRequestFriend,
+    accpetFriend
 }
