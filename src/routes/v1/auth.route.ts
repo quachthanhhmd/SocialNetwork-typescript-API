@@ -133,6 +133,8 @@ router.post("/reset-password", authRouter.resetPassword);
  *               properties:
  *                 user:
  *                   $ref: '#/components/schemas/User'
+ *                 tokens:
+ *                   $ref: '#/components/chemas/Token'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *                  

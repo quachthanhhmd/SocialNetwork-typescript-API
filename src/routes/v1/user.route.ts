@@ -2,20 +2,22 @@ import express from "express";
 
 import auth from "../../middlewares/auth.middleware";
 import userRouter from "../../controllers/user.controller";
-
 import multer from "../../config/multer";
+import validate from "../../middlewares/validate.middleware";
+import userValidation from "../../validations/user.validation";
+
 
 const router: express.Router = express.Router();
 
 
 
-router.get('/:id', userRouter.getOneUser);
-router.patch('/:id', userRouter.updateUser);
+router.get('/:id', auth(), validate(userValidation.getUser), userRouter.getOneUser);
+router.patch('/:id', auth(), validate(userValidation.updateUserProfile), userRouter.updateUser);
 
-router.put('/avatar/:id', multer.imageUpload.single('avtImage'), userRouter.updateAvt);
-router.put('/background-image/:id', multer.imageUpload.single('backgroundImage'), userRouter.updateBackgroundImage);
+router.put('/avatar/:id', auth(), validate(userValidation.updateAvt), multer.imageUpload.single('avtImage'), userRouter.updateAvt);
+router.put('/background-image/:id', auth(), validate(userValidation.updateBackgroundImage), multer.imageUpload.single('backgroundImage'), userRouter.updateBackgroundImage);
 
-router.post('/request-friend/:id', auth(), userRouter.sendRequestFriend);
+router.post('/request-friend/:id', auth(), validate(userValidation.requestFriend), userRouter.sendRequestFriend);
 
 
 export default router;
@@ -34,6 +36,8 @@ export default router;
  *   get:
  *     summary: Get One User by Id.
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path 
  *         name: id 
@@ -169,6 +173,8 @@ export default router;
  *     summary: Update user information
  *     desciption: update user information
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path 
  *         name: id 
@@ -192,12 +198,6 @@ export default router;
  *               gender: 
  *                 type: string 
  *                 enum: [male, female, other]
- *               avtImage: 
- *                 type: string
- *                 format: binary
- *               backgroundImage: 
- *                 type: string
- *                 format: binary
  *               email: 
  *                 type: string
  *               github:
@@ -242,6 +242,8 @@ export default router;
  *   put: 
  *     summary: update avatar for user
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path 
  *         name: id 
@@ -275,6 +277,8 @@ export default router;
  *   put: 
  *     summary: update background Image for user
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path 
  *         name: id 
