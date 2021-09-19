@@ -41,14 +41,26 @@ const updateBackgroundImage = {
 
 const requestFriend = {
     params: Joi.object().keys({
-        id: Joi.string().required()
+        id: Joi.number().required()
     }),
 }
 
 const acceptFriend = {
     params: Joi.object().keys({
-        id: Joi.string().required()
+        id: Joi.number().required()
     }),
+}
+
+const refuseFriendRequest = {
+    params: Joi.object().keys({
+        id: Joi.number().required()
+    }),
+}
+
+const changeFollow = {
+    params: Joi.object().keys({
+        id: Joi.number().required(),
+    })
 }
 
 export default {
@@ -58,4 +70,6 @@ export default {
     updateAvt,
     updateBackgroundImage,
     updateUserProfile,
+    refuseFriendRequest,
+    changeFollow
 }

@@ -83,6 +83,8 @@ const updateRelationship = async (userId: number, parnerId: number, stateOfFrien
  */
 const sendRequestFriend = async (userId: number, parnerId: number): Promise<void> => {
 
+    if (userId === parnerId) throw FriendError.UnSelfAccept;
+
     const relationship = await findFriendById(userId, parnerId);
 
     if (relationship && relationship.status !== STATUS.NOTHING) throw FriendError.FriendExist;
@@ -95,8 +97,14 @@ const sendRequestFriend = async (userId: number, parnerId: number): Promise<void
             isFollow: true,
             status: STATUS.SPENDING
         });
+        return;
     }
     
+    if (relationship && relationship.status === STATUS.NOTHING) {
+        await updateRelationship(userId, parnerId, {status: STATUS.SPENDING, isFollow: true});
+
+        return;
+    }
 }
 
 /**
@@ -126,7 +134,15 @@ const acceptRequestFriend = async (userId: number, parnerId: number): Promise<vo
 
 }
 
+/**
+ * Change state of follow (From true to false or false to true)
+ * @param {number} userId 
+ * @param {number} parnerId 
+ * @returns {Promise<void>}
+ */
 const changeFollow = async (userId: number, parnerId: number) : Promise<void> =>{
+
+    if (userId === parnerId) throw FriendError.UnSelfAccept;
 
     const relationship: Friend | null = await findFriendById(userId, parnerId);
 
@@ -139,13 +155,32 @@ const changeFollow = async (userId: number, parnerId: number) : Promise<void> =>
         return;
     }
     
-    if (relationship.userId === userId) throw FriendError.UnSelfAccept;
-
+    
     await updateRelationship(userId, parnerId, {isFollow: !relationship.isFollow});
 }
+
+
+/**
+ * Refuse friend request. When refuse, follow will set false
+ * @param {number} userId 
+ * @param {number} parnerId
+ * @return {Promise<void>} 
+ */
+const refuseFriend = async (userId: number, parnerId: number) : Promise<void> => {
+
+    const relationship: Friend | null = await findFriendById(userId, parnerId);
+
+    if (!relationship)
+        throw FriendError.FriendNotFound;
+    
+
+    await updateRelationship(userId, parnerId, {status: STATUS.NOTHING, isFollow: false});
+}
+
 
 export default {
     sendRequestFriend,
     acceptRequestFriend,
-    changeFollow
+    changeFollow,
+    refuseFriend,
 }

@@ -18,7 +18,10 @@ router.put('/avatar/:id', auth(), validate(userValidation.updateAvt), multer.ima
 router.put('/background-image/:id', auth(), validate(userValidation.updateBackgroundImage), multer.imageUpload.single('backgroundImage'), userRouter.updateBackgroundImage);
 
 router.post('/request-friend/:id', auth(), validate(userValidation.requestFriend), userRouter.sendRequestFriend);
-router.post('/accept-friend/:id', auth(), validate(userValidation.acceptFriend), userRouter.accpetFriend);
+router.post('/accept-friend/:id', auth(), validate(userValidation.acceptFriend), userRouter.acceptFriend);
+router.post('/refuse-friend/:id', auth(), validate(userValidation.refuseFriendRequest), userRouter.refuseFriendRequest)
+
+router.post('/follow/:id', auth(), validate(userValidation.changeFollow), userRouter.changeFollow);
 
 export default router;
 
@@ -338,6 +341,60 @@ export default router;
  * /users/accept-friend/{id}:
  *   post:
  *     summary: accept other user sent request before to become a friend
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: id 
+ *         schema: 
+ *           type: number 
+ *           required: true
+ *     responses:
+ *       "200": 
+ *          description: NO CONTENT 
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *          $ref: '#/components/responses/NotFound'
+ *          
+ */
+
+
+/**
+ * @swagger
+ * /users/refuse-friend/{id}:
+ *   post:
+ *     summary: accept other user sent request before to become a friend
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: id 
+ *         schema: 
+ *           type: number 
+ *           required: true
+ *     responses:
+ *       "200": 
+ *          description: NO CONTENT 
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *          $ref: '#/components/responses/NotFound'
+ *          
+ */
+
+
+/**
+ * @swagger
+ * /users/follow/{id}:
+ *   post:
+ *     summary: change state of follow 
  *     tags: [User]
  *     security:
  *       - bearerAuth: []

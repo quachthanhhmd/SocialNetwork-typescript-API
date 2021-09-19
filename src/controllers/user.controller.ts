@@ -13,7 +13,7 @@ interface RequestUpdateUser extends Request {
     body: IUserProfileUpdate,
 }
 
-interface ReuqestWithUser extends Request {
+interface RequestWithUser extends Request {
     user: IUserInfoSummary,
 }
 
@@ -65,7 +65,7 @@ const updateBackgroundImage = catchAsync(async (req: Request, res: Response) => 
 
 
 //accpet friend
-const sendRequestFriend = catchAsync(async (req: ReuqestWithUser, res: Response) => {
+const sendRequestFriend = catchAsync(async (req: RequestWithUser, res: Response) => {
 
     console.log(req.user);
     const userId = req.user!.id;
@@ -73,17 +73,41 @@ const sendRequestFriend = catchAsync(async (req: ReuqestWithUser, res: Response)
 
     await userService.sendRequestFriend(userId, friendId);
 
-    return res.status(httpStatus.CREATED).send({});
+
+    return res.status(httpStatus.OK).send({});
 })
 
-const accpetFriend = catchAsync(async (req: ReuqestWithUser, res: Response) => {
+const acceptFriend = catchAsync(async (req: RequestWithUser, res: Response) => {
 
     const userId =  req.user!.id;
     const friendId = +req.params.id;
 
     await userService.acceptRequetFriend(userId, friendId);
 
-    res.status(httpStatus.CREATED).send({});
+    res.status(httpStatus.OK).send({});
+})
+
+
+//refuse a friend request
+const refuseFriendRequest = catchAsync( async (req: RequestWithUser, res: Response) => {
+
+    const userId =  req.user!.id;
+    const friendId = +req.params.id;
+
+    await userService.refuseFriendRequest(userId, friendId);
+
+    res.status(httpStatus.OK).send({});
+})
+
+
+//chang state follow
+const changeFollow = catchAsync(async (req: RequestWithUser, res: Response)=> {
+
+    const userId = req.user!.id
+    const friendId = +req.params.id;
+
+    await userService.changeFollow(userId, friendId);
+    res.status(httpStatus.OK).send({});
 })
 
 export default {
@@ -92,5 +116,7 @@ export default {
     updateAvt,
     updateBackgroundImage,
     sendRequestFriend,
-    accpetFriend
+    acceptFriend,
+    refuseFriendRequest,
+    changeFollow
 }

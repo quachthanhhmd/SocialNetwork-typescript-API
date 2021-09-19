@@ -148,7 +148,7 @@ const getInfoOfUser = async (userId: number) => {
 const updateUser = async (userId: number, updateObject: IUserUpdate): Promise<void> => {
 
 
-   await User.update(
+    await User.update(
         updateObject,
         {
             where: {
@@ -256,9 +256,9 @@ const getFullUserInfo = async (userId: number): Promise<User | null> => {
 }
 
 
-const updateAllInformation = async(id: number, updateBody: IUserProfileUpdate) =>{
+const updateAllInformation = async (id: number, updateBody: IUserProfileUpdate) => {
 
-    
+
     //update contacts
     await userProfileService.updateProfileById(id, updateBody);
 
@@ -268,7 +268,7 @@ const updateAllInformation = async(id: number, updateBody: IUserProfileUpdate) =
     if (!profile) throw UserError.UserNotFound;
 
     console.log(profile);
-    await contactService.updateContactByProfileId(profile.id, updateBody);  
+    await contactService.updateContactByProfileId(profile.id, updateBody);
 }
 
 /**
@@ -282,7 +282,7 @@ const updateImageUser = async (userId: number, file: any, name: string, folder: 
 
     const user = await findUserById(userId);
 
-    
+
     if (!user) throw UserError.UserNotFound;
 
     await userProfileService.updateUserProfileImage(userId, file, name, folder);
@@ -294,7 +294,7 @@ const updateImageUser = async (userId: number, file: any, name: string, folder: 
  * @param {number} parnerId
  * @return {Promise<void>} 
  */
-const sendRequestFriend = async (userId: number, parnerId: number) : Promise<void> => {
+const sendRequestFriend = async (userId: number, parnerId: number): Promise<void> => {
 
     const parner = findUserById(parnerId);
 
@@ -309,13 +309,44 @@ const sendRequestFriend = async (userId: number, parnerId: number) : Promise<voi
  * @param {number} parnerId
  * @return {Promise<void>} 
  */
-const acceptRequetFriend = async (userId: number, parnerId: number) : Promise<void> => {
+const acceptRequetFriend = async (userId: number, parnerId: number): Promise<void> => {
 
     const parner = findUserById(parnerId);
 
     if (!parner) throw UserError.UserNotFound;
 
     await friendService.acceptRequestFriend(userId, parnerId);
+}
+
+/**
+ * Refuse the friend request by User Id
+ * @param {number} userId 
+ * @param {number} parnerId 
+ * @return {Promise<void>}
+ */
+const refuseFriendRequest = async (userId: number, parnerId: number): Promise<void> => {
+
+    const parner = findUserById(parnerId);
+
+    if (!parner) throw UserError.UserNotFound;
+
+    await friendService.refuseFriend(userId, parnerId);
+}
+
+/**
+ * Change state of follow
+ * @param {number} userId 
+ * @param {number} parnerId
+ * @return {Promise<void>} 
+ */
+const changeFollow = async (userId: number, parnerId: number) : Promise<void> => {
+
+    const parner = findUserById(parnerId);
+    
+    if (!parner) throw UserError.UserNotFound;
+
+    await friendService.changeFollow(userId, parnerId);
+
 }
 
 export default {
@@ -331,4 +362,6 @@ export default {
     updateImageUser,
     sendRequestFriend,
     acceptRequetFriend,
+    refuseFriendRequest,
+    changeFollow,
 }
