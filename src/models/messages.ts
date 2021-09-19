@@ -4,7 +4,7 @@ import { sequelize } from "../config/sequelize";
 
 interface MessagesAttributes {
 
-    id: number,
+    id?: number,
     sourceId: number,
     targetId: number,
     content: string,
