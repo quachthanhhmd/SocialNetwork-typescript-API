@@ -1,12 +1,14 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/sequelize";
 
+import {STATUS} from "../constants/friendStatus.constant";
+
 interface UserFriendAttributes {
     id?: number;
     friendId: number,
     userId: number,
-    isAccepted?: Boolean;
-    isFollow: Boolean;
+    status?: string;
+    isFollow?: Boolean;
 }
 
 interface UserFriendCreationAttributes extends Optional<UserFriendAttributes, "id"> { };
@@ -16,7 +18,7 @@ class UserFriends extends Model<UserFriendCreationAttributes, UserFriendAttribut
     public readonly id!: number;
     public friendId!: number;
     public userId!: number;
-    public isAccepted!: Boolean;
+    public status!: string;
     public isFollow!: Boolean;
 
     
@@ -30,9 +32,12 @@ UserFriends.init({
         primaryKey: true,
         autoIncrement: true,
     },
-    isAccepted: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+    status: {
+        type: DataTypes.STRING(10),
+        validate: {
+            isIn: [[STATUS.ACCEPT, STATUS.NOTHING, STATUS.REFUSE, STATUS.SPENDING, STATUS.BLOCKING]],
+        },
+        defaultValue: STATUS.NOTHING,
     },
     isFollow: {
         type: DataTypes.BOOLEAN,
