@@ -1,4 +1,6 @@
 import express from "express";
+
+import auth from "../../middlewares/auth.middleware";
 import userRouter from "../../controllers/user.controller";
 
 import multer from "../../config/multer";
@@ -12,6 +14,9 @@ router.patch('/:id', userRouter.updateUser);
 
 router.put('/avatar/:id', multer.imageUpload.single('avtImage'), userRouter.updateAvt);
 router.put('/background-image/:id', multer.imageUpload.single('backgroundImage'), userRouter.updateBackgroundImage);
+
+router.post('/request-friend/:id', auth(), userRouter.sendRequestFriend);
+
 
 export default router;
 
@@ -295,4 +300,30 @@ export default router;
  *         $ref: '#/components/responses/InternalError'  
  *              
  *   
+ */
+
+/**
+ * @swagger
+ * /users/request-friend/{id}:
+ *   post:
+ *     summary: request other users to become a friend
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: id 
+ *         schema: 
+ *           type: number 
+ *           required: true
+ *     responses:
+ *       "200": 
+ *          description: NO CONTENT 
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *          $ref: '#/components/responses/NotFound'
+ *          
  */

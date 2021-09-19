@@ -8,6 +8,8 @@ import db from "../models/index";
 import UserError from "../constants/apiError/user.contant";
 import userProfileService from "./userProfile.service";
 import contactService from "./contact.service";
+import friendService from "./friend.service";
+
 import User from "../models/user";
 
 import { comparePasswordHash } from './../config/bcrypt';
@@ -286,6 +288,20 @@ const updateImageUser = async (userId: number, file: any, name: string, folder: 
     await userProfileService.updateUserProfileImage(userId, file, name, folder);
 }
 
+/**
+ * Send requet friend 
+ * @param {number} userId 
+ * @param {number} parnerId
+ * @return {Promise<void>} 
+ */
+const sendRequestFriend = async (userId: number, parnerId: number) : Promise<void> => {
+
+    const parner = findUserById(parnerId);
+
+    if (!parner) throw UserError.UserNotFound;
+
+    await friendService.sendRequestFriend(userId, parnerId);
+}
 
 export default {
     findUserById,
@@ -297,5 +313,6 @@ export default {
     ChangePasswordById,
     getFullUserInfo,
     updateAllInformation,
-    updateImageUser
+    updateImageUser,
+    sendRequestFriend
 }

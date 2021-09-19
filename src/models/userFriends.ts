@@ -5,7 +5,7 @@ interface UserFriendAttributes {
     id?: number;
     friendId: number,
     userId: number,
-    accepted: Boolean;
+    isAccepted?: Boolean;
     isFollow: Boolean;
 }
 
@@ -16,7 +16,7 @@ class UserFriends extends Model<UserFriendCreationAttributes, UserFriendAttribut
     public readonly id!: number;
     public friendId!: number;
     public userId!: number;
-    public accepted!: Boolean;
+    public isAccepted!: Boolean;
     public isFollow!: Boolean;
 
     
@@ -30,7 +30,7 @@ UserFriends.init({
         primaryKey: true,
         autoIncrement: true,
     },
-    accepted: {
+    isAccepted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
