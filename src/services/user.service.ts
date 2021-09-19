@@ -266,9 +266,26 @@ const updateAllInformation = async(id: number, updateBody: IUserProfileUpdate) =
     if (!profile) throw UserError.UserNotFound;
 
     console.log(profile);
-    await contactService.updateContactByProfileId(profile.id, updateBody);
-   
+    await contactService.updateContactByProfileId(profile.id, updateBody);  
 }
+
+/**
+ * Update image by user Id ----- using id, file, name and folder to save file and upload
+ * @param {number}userId 
+ * @param {any} file 
+ * @param {string} name 
+ * @param {string} folder 
+ */
+const updateImageUser = async (userId: number, file: any, name: string, folder: string) => {
+
+    const user = await findUserById(userId);
+
+    
+    if (!user) throw UserError.UserNotFound;
+
+    await userProfileService.updateUserProfileImage(userId, file, name, folder);
+}
+
 
 export default {
     findUserById,
@@ -279,5 +296,6 @@ export default {
     updateUser,
     ChangePasswordById,
     getFullUserInfo,
-    updateAllInformation
+    updateAllInformation,
+    updateImageUser
 }

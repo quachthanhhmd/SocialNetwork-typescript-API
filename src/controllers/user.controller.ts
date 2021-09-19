@@ -38,7 +38,31 @@ const updateUser = catchAsync( async (req: RequestUpdateUser, res: Response) => 
 })
 
 
+//update image avt 
+const updateAvt = catchAsync( async (req:Request, res: Response) => {
+
+    const id = +req.params.id;
+
+    await userService.updateImageUser(id, req.file, "avtImage", "avatar");
+
+    res.status(httpStatus.NO_CONTENT).send();
+})
+
+
+//update backgroundImage
+const updateBackgroundImage = catchAsync( async (req: Request, res: Response) => {
+
+    const id = +req.params.id;
+
+    await userService.updateImageUser(id, req.file, "backgroundImage", "background");
+
+    res.status(httpStatus.NO_CONTENT).send();
+})
+
+
 export default {
     getOneUser,
-    updateUser
+    updateUser,
+    updateAvt,
+    updateBackgroundImage
 }

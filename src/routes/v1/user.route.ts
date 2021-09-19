@@ -10,6 +10,9 @@ const router: express.Router = express.Router();
 router.get('/:id', userRouter.getOneUser);
 router.patch('/:id', userRouter.updateUser);
 
+router.put('/avatar/:id', multer.imageUpload.single('avtImage'), userRouter.updateAvt);
+router.put('/background-image/:id', multer.imageUpload.single('backgroundImage'), userRouter.updateBackgroundImage);
+
 export default router;
 
 
@@ -228,3 +231,68 @@ export default router;
  *            
  */
 
+/**
+ * @swagger 
+ * /users/avatar/{id}:
+ *   put: 
+ *     summary: update avatar for user
+ *     tags: [User]
+ *     parameters:
+ *       - in: path 
+ *         name: id 
+ *         schema:
+ *           type: number
+ *           required: true 
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:            
+ *               avtImage:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       "204": 
+ *         description: NO CONTENT  
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'      
+ *              
+ *   
+ */
+
+/**
+ * @swagger 
+ * /users/background-image/{id}:
+ *   put: 
+ *     summary: update background Image for user
+ *     tags: [User]
+ *     parameters:
+ *       - in: path 
+ *         name: id 
+ *         schema:
+ *           type: number
+ *           required: true 
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:            
+ *               backgroundImage:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       "204": 
+ *         description: NO CONTENT  
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'  
+ *              
+ *   
+ */

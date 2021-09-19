@@ -7,8 +7,9 @@ import { CreateUserProfile } from "../interfaces/user.interface";
 import {IUserProfile} from "../interfaces/userProfile.interface";
 
 import ApiError from "../constants/apiError/user.contant";
+import AuthError from "../constants/apiError/auth.constant";
 
-
+import cloudinary from "../config/cloudinary";
 
 /**
  * Pick feild from any object to user profile
@@ -69,8 +70,31 @@ const findProfileByUserId = async (userId: number) : Promise<UserProfile | null>
     })
 }
 
+const updateUserProfileImage = async(userId: number, file: any, name: string, folder: string) => {
+
+    const ret = await cloudinary.uploadSingleImageProfile(file.path, folder);
+    
+    //images uploaded before still upload and save them as the history images.
+    
+   
+    if (!ret) throw ApiError.ServerError;
+    
+    UserProfile.update( 
+        {
+            [name]: ret!.url,
+        },
+        {
+            where: {
+                userId: userId
+            }
+        }
+    )
+}
+
+
 export default {
     createUserProfile,
     updateProfileById,
-    findProfileByUserId
+    findProfileByUserId,
+    updateUserProfileImage
 }

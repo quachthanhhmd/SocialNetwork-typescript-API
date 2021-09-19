@@ -7,7 +7,14 @@ cloud.config({
     CLOUDINARY_URL: env.CLOUDINARY_URL
 });
 
-const uploadSingleImageProfile = (file: string, folder: string) => {
+/**
+ * UPLOAD FILE TO CLOUDINAY
+ * @param {}file 
+ * @param {string}folder 
+ * @returns 
+ */
+const uploadSingleImageProfile = (file: any, folder: string): Promise<any> => {
+ 
     return new Promise((resolve) => {
         cloud.uploader
             .upload(file, {
