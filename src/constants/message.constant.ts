@@ -15,3 +15,10 @@ export const TYPEMESSAGE: TypeMessageAttributes = {
     IMAGE: "image",
 };
 
+export const STATUSMESSAGE = {
+    WAITING: 'waiting',
+    SENT: 'sent',
+    SEEN: 'seen',
+}
+
+

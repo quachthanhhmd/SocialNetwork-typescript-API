@@ -7,7 +7,9 @@ import auth from "../../middlewares/auth.middleware";
 const router: express.Router = express.Router();
 
 
-router.post("/create-mesage/:targetId", auth(), messageRouter.createMessage);
+router
+    .post("/:targetId", auth(), messageRouter.createMessage)
+    .delete("/:targetId", auth(), messageRouter.deleteConversation)
 
 
 export default router;
@@ -23,7 +25,7 @@ export default router;
 
 /**
  * @swagger
- * /message/create-mesage/{targetId}:
+ * /message/{targetId}:
  *   post:
  *     description: user send message for another user. We store it in DB. IMPORTANT, besure to store image, video and file at FE and send link for us. We aren't reponsible for this problem.
  *     tags: [Message]
@@ -61,5 +63,25 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- *      
+ *   
+ *   delete:
+ *     description: User can delete the conversation. If one of them delete the conversation, all message of them will be removed
+ *     tags: [Message]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: targetId
+ *         schema:      
+ *           type: number 
+ *           required: true   
+ *     responses:
+ *       "201":
+ *         description: NO CONTENT
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */

@@ -25,6 +25,18 @@ const createMessage = catchAsync(async (req: RequestWithUser, res: Response) => 
 })
 
 
+//delete all messages 
+const deleteConversation = catchAsync(async (req:RequestWithUser, res: Response) => {
+
+    const senderId = req.user!.id;
+    const targetId = +req.params.targetId;
+
+    await messageService.deleteConversationByUserId(senderId, targetId);
+    res.status(httpStatus.OK).send({});
+})
+
+
 export default {
-    createMessage
+    createMessage,
+    deleteConversation
 }
