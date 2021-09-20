@@ -15,8 +15,9 @@ import ApiError from "./utils/ApiError";
 
 import passportConfig from "./config/passport";
 
+
 class App {
-    private httpServer: any
+    public httpServer: any
 
     constructor() {
         this.httpServer = express()
@@ -62,4 +63,4 @@ class App {
     }
 }
 
-export default App;
+export default new App;
