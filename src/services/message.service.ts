@@ -6,8 +6,8 @@ import userService from "../services/user.service";
 import UserError from "../constants/apiError/user.contant";
 import MessageError from "../constants/apiError/message.constant";
 
-import { IMessageContent, IMessageCreate } from "../interfaces/mesage.interface";
-
+import { IMessageContent, IMessageCreate } from "../interfaces/message.interface";
+import {IPagination} from "../interfaces/pagination.interface";
 
 /**
  * Find  a conversation of user 
@@ -16,7 +16,7 @@ import { IMessageContent, IMessageCreate } from "../interfaces/mesage.interface"
  * @param {} targetId 
  * @returns { Promise<Message> }
  */
-const findAConversation = async (userId: number, targetId: number) : Promise<Message | null> =>{
+const findAConversation = async (userId: number, targetId: number): Promise<Message | null> => {
 
     return await Message.findOne({
         where: {
@@ -25,18 +25,54 @@ const findAConversation = async (userId: number, targetId: number) : Promise<Mes
                     [Op.and]: [
                         { sourceId: userId, },
                         { targetId: targetId },
-                        { isDeletedA: false},
+                        { isDeletedA: false },
                     ]
                 },
                 {
                     [Op.and]: [
-                        { sourceId: targetId,},
+                        { sourceId: targetId, },
                         { targetId: userId },
-                        { isDeletedB: false},
+                        { isDeletedB: false },
                     ]
                 }
-            ]  
+            ]
         }
+    })
+}
+
+/**
+ * Get list message to display
+ * @param {number} userId 
+ * @param {number} targetId 
+ * @param {IPagination} paging 
+ * @returns {Promise<Array<Message> | null>}
+ */
+const findListMessage = async (userId: number, targetId: number, paging: IPagination) : Promise<Array<Message> | null>=> {
+
+
+    return await Message.findAll({
+        attributes: ["id", "type", "content", "link", "status"],
+        where: {
+            [Op.or]: [
+                {
+                    [Op.and]: [
+                        { sourceId: userId, },
+                        { targetId: targetId },
+                        { isDeletedA: false },
+                    ]
+                },
+                {
+                    [Op.and]: [
+                        { sourceId: targetId, },
+                        { targetId: userId },
+                        { isDeletedB: false },
+                    ]
+                }
+            ]
+        },
+        order: [['createdAt', 'ASC']],
+        limit: paging.limit,
+        offset: paging.limit * paging.page - 1,
     })
 }
 
@@ -71,8 +107,9 @@ interface IStateMessage {
  * @param userId 
  * @param targetId 
  * @param updateState 
+ * @return {Promise<void>}
  */
-const updateStateMessage = async (userId: number, targetId: number, updateState: IStateMessage) => {
+const updateStateMessage = async (userId: number, targetId: number, updateState: IStateMessage): Promise<void> => {
 
 
     await Message.update(
@@ -91,8 +128,13 @@ const updateStateMessage = async (userId: number, targetId: number, updateState:
 
 
 
-//detete a conversation
-const deleteConversationByUserId = async (userId: number, targetId: number) => {
+/**
+ * Delete a conversation
+ * @param {number} userId 
+ * @param {number} targetId 
+ * @return {Promise<void>}
+ */
+const deleteConversationByUserId = async (userId: number, targetId: number): Promise<void> => {
 
     const userTarget = userService.findUserById(targetId);
 
@@ -103,15 +145,16 @@ const deleteConversationByUserId = async (userId: number, targetId: number) => {
 
     console.log(conversation);
     if (!conversation) throw MessageError.NotFound;
-    
+
     //we will update 2 times,
     //fisrtly, deletefromA will be set for record which has userId and targetId as a sourceId and targetId
     //Secondly, deletefrom b will be set for opposite case.
-    await updateStateMessage(userId, targetId, {isDeletedA : true});
-    await updateStateMessage(targetId, userId, {isDeletedB : true});
+    await updateStateMessage(userId, targetId, { isDeletedA: true });
+    await updateStateMessage(targetId, userId, { isDeletedB: true });
 }
 
 export default {
     createMessageById,
-    deleteConversationByUserId
+    deleteConversationByUserId,
+    findListMessage
 }

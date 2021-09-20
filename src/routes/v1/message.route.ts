@@ -12,7 +12,7 @@ const router: express.Router = express.Router();
 router
     .post("/:targetId", auth(), validate(messageValidation.createMessage), messageRouter.createMessage)
     .delete("/:targetId", auth(), validate(messageValidation.deleteConversation), messageRouter.deleteConversation)
-
+    .get("/:targetId", auth(), validate(messageValidation.getListMessages), messageRouter.getListMessages);
 
 export default router;
 
@@ -28,6 +28,37 @@ export default router;
 /**
  * @swagger
  * /message/{targetId}:
+ *   get:
+ *     description: get list message sort by create time 
+ *     tags: [Message]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: targetId 
+ *         schema:      
+ *           type: number 
+ *           required: true
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: number
+ *           required: true
+ *       - in: query
+ *         name: page 
+ *         schema:
+ *           type: number
+ *           required: true 
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/schemas/Messages'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ * 
  *   post:
  *     description: user send message for another user. We store it in DB. IMPORTANT, besure to store image, video and file at FE and send link for us. We aren't reponsible for this problem.
  *     tags: [Message]

@@ -37,15 +37,17 @@ components:
         access:
           type: object
           properties:
-            token: string
+            token:
+              type: string
             expire: 
-            type: date
+              type: date
         refresh:
           type: object
           properties:
-            token: string
+            token: 
+              type: string
             expire: 
-            type: date
+              type: date
       example:
         access:
           - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTYzMTY5MzQ4MiwiZXhwIjoxNjMxNjkzNDgyLCJ0eXBlIjoiYWNjZXNzIn0.jLGSfGePNJgvIFvPKLpVQID6y2mZpaFKqleLdw-MiYg
@@ -53,7 +55,35 @@ components:
         refesh:
           - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
             expire: 2021-09-15T08:11:22.838Z
-    
+    Messages: 
+      type: array
+      items:
+        type: object  
+        properties:
+          id:
+            type: number
+          content:
+            type: string
+          link:
+            type: string
+          type:
+            type: string
+            enum: ["text", "file", "video", "image"]
+          status:
+            type: string
+            enum: ["waiting", "sent", "seen"]
+      examples:
+        - id: 1
+          content: Hello, my name is Thanh.
+          link: null
+          type: text
+          status: sent
+        - id: 2
+          content: I'll show u my picture.
+          link: https://cine.megamind.vn/wp-content/uploads/2020/12/tran-duc-bo-mew-mew-300x300.jpg
+          type: image
+          status: waiting
+            
     Error:
       type: object
       properties:
