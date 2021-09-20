@@ -55,19 +55,24 @@ const findListMessage = async (userId: number, targetId: number, paging: ISearch
         attributes: ["id", "type", "content", "link", "status"],
 
         where: {
-            [Op.or]: [
+            [Op.and]: [
                 {
-                    [Op.and]: [
-                        { sourceId: userId, },
-                        { targetId: targetId },
-                        { isDeletedA: false },
-                    ]
-                },
-                {
-                    [Op.and]: [
-                        { sourceId: targetId, },
-                        { targetId: userId },
-                        { isDeletedB: false },
+                    [Op.or]: [
+                        {
+                            [Op.and]: [
+                                { sourceId: userId, },
+                                { targetId: targetId },
+                                { isDeletedA: false },
+                            ]
+                        },
+                        {
+                            [Op.and]: [
+                                { sourceId: targetId, },
+                                { targetId: userId },
+                                { isDeletedB: false },
+                            ]
+                        },
+
                     ]
                 },
                 {
@@ -150,7 +155,6 @@ const deleteConversationByUserId = async (userId: number, targetId: number): Pro
     //find a conversation
     const conversation = await findAConversation(userId, targetId);
 
-    console.log(conversation);
     if (!conversation) throw MessageError.NotFound;
 
     //we will update 2 times,
@@ -160,10 +164,45 @@ const deleteConversationByUserId = async (userId: number, targetId: number): Pro
     await updateStateMessage(targetId, userId, { isDeletedB: true });
 }
 
+const deleteOneMessage = async (userId: number, targetId: number, messageId: number) => {
 
 
+
+    const message = await Message.findOne({
+        where: {
+            id: messageId,
+        }
+    })
+
+
+    if (!message) throw MessageError.NotFound;
+
+    if (message.sourceId === userId) {
+
+        await Message.update(
+            { isDeletedA: true },
+            {
+                where: {
+                    id: messageId,
+                }
+            }
+        )
+    }
+    else {
+        await Message.update(
+            { isDeletedB: true },
+            {
+                where: {
+                    id: messageId,
+                }
+            }
+        )
+    }
+
+}
 export default {
     createMessageById,
     deleteConversationByUserId,
-    findListMessage
+    findListMessage,
+    deleteOneMessage
 }

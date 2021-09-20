@@ -14,7 +14,7 @@ router
     .delete("/:targetId", auth(), validate(messageValidation.deleteConversation), messageRouter.deleteConversation)
     .get("/:targetId", auth(), validate(messageValidation.getListMessages), messageRouter.getListMessages);
 
-
+router.delete("/:targetId/:messageId", auth(), validate(messageValidation.deleteOneMessage), messageRouter.deleteOneMessage);
 
 export default router;
 
@@ -126,3 +126,32 @@ export default router;
  */
 
 
+/**
+ * @swagger
+ * /message/{targetId}/{messageId}:
+ *   delete:
+ *     decription: Delete message for my own user - it means that a parner friend still watch it.
+ *     tags: [Message]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: targetId
+ *         schema:
+ *           type: number
+ *           required: true
+ *       - in: path
+ *         name: messageId
+ *         schema:
+ *           type: number
+ *           required: true
+ *     responses:
+ *       "200":
+ *         description: OK
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */

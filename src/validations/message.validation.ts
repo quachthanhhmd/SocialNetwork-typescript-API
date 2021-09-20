@@ -30,10 +30,17 @@ const getListMessages = {
     })
 }
 
+const deleteOneMessage = {
+    params: Joi.object().keys({
+        targetId: Joi.number().required(),
+        messageId: Joi.number().required(),
+    })
+}
+
 
 export default {
     createMessage,
     deleteConversation,
     getListMessages,
-    
+    deleteOneMessage
 }

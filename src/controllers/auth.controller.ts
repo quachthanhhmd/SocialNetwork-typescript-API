@@ -50,7 +50,7 @@ const signIn = catchAsync( async (req: Request, res: Response) =>{
 
     const tokenCreate = await tokenService.generateTokenAuth(userInfo.id);
     
-    return res.status(httpStatus.CREATED).send({user: userInfo, token: tokenCreate});
+    return res.status(httpStatus.OK).send({user: userInfo, token: tokenCreate});
 })
 
 

@@ -57,7 +57,16 @@ const getListMessages = catchAsync(async (req: RequestPaging, res: Response) => 
 });
 
 
+const deleteOneMessage = catchAsync(async (req: RequestWithUser, res: Response) => {
+    
+    const senderId = req.user!.id;
+    const targetId = +req.params.targetId;
+    const messageId = +req.params.messageId;
 
+    await messageService.deleteOneMessage(senderId, targetId, messageId);
+
+    res.status(httpStatus.OK).send({});
+})
 
 
 
@@ -65,5 +74,5 @@ export default {
     createMessage,
     deleteConversation,
     getListMessages,
-
+    deleteOneMessage
 }
