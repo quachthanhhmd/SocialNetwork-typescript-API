@@ -24,13 +24,16 @@ const getListMessages = {
         targetId: Joi.number().required(),
     }),
     query: Joi.object().keys({
-        limit: Joi.number().required().min(0),
-        page: Joi.number().required().min(0),
+        limit: Joi.number().min(0).default(8),
+        page: Joi.number().min(0).default(1),
+        search: Joi.string(),
     })
 }
+
 
 export default {
     createMessage,
     deleteConversation,
-    getListMessages
+    getListMessages,
+    
 }

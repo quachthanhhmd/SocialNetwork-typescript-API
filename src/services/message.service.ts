@@ -7,7 +7,7 @@ import UserError from "../constants/apiError/user.contant";
 import MessageError from "../constants/apiError/message.constant";
 
 import { IMessageContent, IMessageCreate } from "../interfaces/message.interface";
-import {IPagination} from "../interfaces/pagination.interface";
+import { IPagination, ISearchPagination } from "../interfaces/pagination.interface";
 
 /**
  * Find  a conversation of user 
@@ -47,11 +47,13 @@ const findAConversation = async (userId: number, targetId: number): Promise<Mess
  * @param {IPagination} paging 
  * @returns {Promise<Array<Message> | null>}
  */
-const findListMessage = async (userId: number, targetId: number, paging: IPagination) : Promise<Array<Message> | null>=> {
+const findListMessage = async (userId: number, targetId: number, paging: ISearchPagination): Promise<Array<Message> | null> => {
 
+    const searchString = paging.search ? paging.search : "";
 
     return await Message.findAll({
         attributes: ["id", "type", "content", "link", "status"],
+
         where: {
             [Op.or]: [
                 {
@@ -67,12 +69,17 @@ const findListMessage = async (userId: number, targetId: number, paging: IPagina
                         { targetId: userId },
                         { isDeletedB: false },
                     ]
+                },
+                {
+                    content: {
+                        [Op.like]: `%${searchString}%`
+                    }
                 }
             ]
         },
         order: [['createdAt', 'ASC']],
         limit: paging.limit,
-        offset: paging.limit * paging.page - 1,
+        offset: paging.limit * (paging.page - 1),
     })
 }
 
@@ -152,6 +159,8 @@ const deleteConversationByUserId = async (userId: number, targetId: number): Pro
     await updateStateMessage(userId, targetId, { isDeletedA: true });
     await updateStateMessage(targetId, userId, { isDeletedB: true });
 }
+
+
 
 export default {
     createMessageById,

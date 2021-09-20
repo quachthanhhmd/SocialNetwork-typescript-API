@@ -14,6 +14,8 @@ router
     .delete("/:targetId", auth(), validate(messageValidation.deleteConversation), messageRouter.deleteConversation)
     .get("/:targetId", auth(), validate(messageValidation.getListMessages), messageRouter.getListMessages);
 
+
+
 export default router;
 
 
@@ -29,15 +31,15 @@ export default router;
  * @swagger
  * /message/{targetId}:
  *   get:
- *     description: get list message sort by create time 
+ *     description: get list message sort by create time
  *     tags: [Message]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path 
- *         name: targetId 
- *         schema:      
- *           type: number 
+ *       - in: path
+ *         name: targetId
+ *         schema:
+ *           type: number
  *           required: true
  *       - in: query
  *         name: limit
@@ -45,10 +47,14 @@ export default router;
  *           type: number
  *           required: true
  *       - in: query
- *         name: page 
+ *         name: page
  *         schema:
  *           type: number
- *           required: true 
+ *           required: true
+ *       - in: query
+ *         name: search 
+ *         schema:
+ *           type: string
  *     responses:
  *       "200":
  *         $ref: '#/components/schemas/Messages'
@@ -58,17 +64,17 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- * 
+ *
  *   post:
  *     description: user send message for another user. We store it in DB. IMPORTANT, besure to store image, video and file at FE and send link for us. We aren't reponsible for this problem.
  *     tags: [Message]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path 
- *         name: targetId 
- *         schema:      
- *           type: number 
+ *       - in: path
+ *         name: targetId
+ *         schema:
+ *           type: number
  *           required: true
  *     requestBody:
  *       require: true
@@ -77,15 +83,15 @@ export default router;
  *           schema:
  *             type: object
  *             properties:
- *               content: 
+ *               content:
  *                 type: string
- *               link:  
+ *               link:
  *                 type: string
  *               type:
- *                 type: string 
+ *                 type: string
  *                 enum: [file, text, video, image]
  *             example:
- *               content: Hello, my name is Thanh  
+ *               content: Hello, my name is Thanh
  *               type: text
  *     responses:
  *       "201":
@@ -96,18 +102,18 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- *   
+ *
  *   delete:
  *     description: User can delete the conversation. If one of them delete the conversation, all message of them will be removed
  *     tags: [Message]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path 
+ *       - in: path
  *         name: targetId
- *         schema:      
- *           type: number 
- *           required: true   
+ *         schema:
+ *           type: number
+ *           required: true
  *     responses:
  *       "201":
  *         description: NO CONTENT
@@ -118,3 +124,5 @@ export default router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
+
+

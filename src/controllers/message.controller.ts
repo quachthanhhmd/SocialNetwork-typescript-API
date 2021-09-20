@@ -1,4 +1,4 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 
 import httpStatus from "http-status";
 
@@ -6,9 +6,9 @@ import httpStatus from "http-status";
 import messageService from "../services/message.service";
 import catchAsync from "../utils/catchAsync";
 
-import {IMessageContent} from "../interfaces/message.interface";
+import { IMessageContent } from "../interfaces/message.interface";
 import { IUserInfoSummary } from "../interfaces/user.interface";
-import {IPagination} from "../interfaces/pagination.interface";
+import { IPagination, ISearchPagination } from "../interfaces/pagination.interface";
 
 interface RequestWithUser extends Request {
     user: IUserInfoSummary,
@@ -28,7 +28,7 @@ const createMessage = catchAsync(async (req: RequestWithUser, res: Response) => 
 
 
 //delete all messages 
-const deleteConversation = catchAsync(async (req:RequestWithUser, res: Response) => {
+const deleteConversation = catchAsync(async (req: RequestWithUser, res: Response) => {
 
     const senderId = req.user!.id;
     const targetId = +req.params.targetId;
@@ -37,9 +37,9 @@ const deleteConversation = catchAsync(async (req:RequestWithUser, res: Response)
     res.status(httpStatus.OK).send({});
 })
 
- 
 
-interface RequestPaging extends Request<any, any, any, IPagination> {
+
+interface RequestPaging extends Request<any, any, any, ISearchPagination> {
 
     user: IUserInfoSummary,
 }
@@ -52,13 +52,18 @@ const getListMessages = catchAsync(async (req: RequestPaging, res: Response) => 
 
 
     const messageList = await messageService.findListMessage(senderId, targetId, req.query);
-    console.log(messageList);
+
     res.status(httpStatus.OK).send(messageList);
-})
+});
+
+
+
+
 
 
 export default {
     createMessage,
     deleteConversation,
-    getListMessages
+    getListMessages,
+
 }
