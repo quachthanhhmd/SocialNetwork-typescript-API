@@ -4,28 +4,18 @@ import app from './app'
 
 import logger from "./config/logger";
 
-//import { socketConnect } from "./socket";
+import { socketConnect } from "./socket";
 
-import * as socketIo from 'socket.io';
+
 
 const port = parseInt(process.env.PORT || '3000')
 
 
 const server = createServer(app.httpServer);
 
-//socketConnect(server);
+socketConnect(server);
 
 
-
-let io: any = new socketIo.Server(server);
-
-io.on('connect', (socket: any) => {
-    console.log('Connected client on port.');
-
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
-    });
-});
 
 server.listen(port, () => {
     logger.info(`Listening to port ${port}`);

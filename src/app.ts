@@ -2,18 +2,15 @@ import httpStatus  from 'http-status';
 import passport from "passport";
 
 import express, { Request, Response, NextFunction } from 'express';
-
-
-//----
 import cors from "cors";
-
+//----
+import passportConfig from "./config/passport";
 import morgan from './config/morgan';
 import env from "./config/environments";
 import routes from "./routes/v1/index";
 import ApiError from "./utils/ApiError";
 
-
-import passportConfig from "./config/passport";
+import {errorHandler, errorConverter} from "./middlewares/error.middleware";
 
 
 class App {
@@ -22,6 +19,12 @@ class App {
     constructor() {
         this.httpServer = express()
 
+
+        //log method api
+        if (env.TYPE != "test"){
+            this.httpServer.use(morgan.successHandler);
+            this.httpServer.use(morgan.errorHandler);
+        }
 
         // parse json request body
         this.httpServer.use(express.json());
@@ -46,8 +49,10 @@ class App {
             next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
         });
 
-        this.httpServer.use(morgan.successHandler);
-        this.httpServer.use(morgan.errorHandler);
+
+        this.httpServer.use(errorConverter);
+        this.httpServer.use(errorHandler);
+        
     }
 
     public Start = (port: number) => {
