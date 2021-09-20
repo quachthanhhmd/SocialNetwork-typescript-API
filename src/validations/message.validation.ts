@@ -13,6 +13,13 @@ const createMessage = {
     })
 }
 
+const deleteConversation = {
+    params: Joi.object().keys({
+        targetId: Joi.number().required(),
+    })
+}
+
 export default {
-    createMessage
+    createMessage,
+    deleteConversation
 }

@@ -3,13 +3,15 @@ import express from "express";
 import messageRouter from "../../controllers/message.controller";
 import auth from "../../middlewares/auth.middleware";
 
+import validate from "../../middlewares/validate.middleware";
+import messageValidation from "../../validations/message.validation";
 
 const router: express.Router = express.Router();
 
 
 router
-    .post("/:targetId", auth(), messageRouter.createMessage)
-    .delete("/:targetId", auth(), messageRouter.deleteConversation)
+    .post("/:targetId", auth(), validate(messageValidation.createMessage), messageRouter.createMessage)
+    .delete("/:targetId", auth(), validate(messageValidation.deleteConversation), messageRouter.deleteConversation)
 
 
 export default router;
