@@ -14,7 +14,7 @@ import {errorHandler, errorConverter} from "./middlewares/error.middleware";
 
 
 class App {
-    public httpServer: any
+    public httpServer: any;
 
     constructor() {
         this.httpServer = express()

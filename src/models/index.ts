@@ -41,8 +41,8 @@ import Token from "./token";
     UserFriend.belongsTo(User, { foreignKey: "friendId"});
 
     //User with Posts
-    User.hasMany(UserPost, {as: "posts"});
-    UserPost.belongsTo(User);
+    User.hasMany(UserPost, {as: "posts", foreignKey:"userId"});
+    UserPost.belongsTo(User, { foreignKey:"userId"});
 
 
     //Post with Comments
@@ -68,8 +68,8 @@ import Token from "./token";
         foreignKey: "targetId",
     });
 
-    UserPost.hasMany(Photo, {as: "photos"});
-    Photo.belongsTo(UserPost);
+    UserPost.hasMany(Photo, {as: "photos", foreignKey: "postId"});
+    Photo.belongsTo(UserPost, {foreignKey: "postId"});
 
 
 

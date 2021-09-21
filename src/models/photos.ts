@@ -4,8 +4,9 @@ import { sequelize } from "../config/sequelize";
 
 interface PhotoAttributes {
 
-    id: number,
+    id?: number,
     imageLink: string,
+    postId: number,
 };
 
 
@@ -15,7 +16,7 @@ class Photo extends Model<PhotoCreationAttributes, PhotoAttributes>
     implements PhotoAttributes {
     public readonly id!: number;
     public imageLink!: string;
-
+    public postId!: number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -32,6 +33,14 @@ Photo.init({
         allowNull: false,
         validate: {
             isUrl: true,
+        }
+    },
+    postId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+            model: "userposts",
+            key: "id"
         }
     }
 }, {

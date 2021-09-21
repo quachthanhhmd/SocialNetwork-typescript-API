@@ -8,8 +8,9 @@ interface UserPostAttributes {
 
     id?: number,
     content: string,
-    isChange: Boolean,
-    isHidden: Boolean,
+    isChange?: Boolean,
+    isHidden?: Boolean,
+    userId: number,
 }
 
 interface UserPostCreationAttributes extends Optional<UserPostAttributes, "id"> { };
@@ -20,6 +21,7 @@ class UserPosts extends Model<UserPostCreationAttributes, UserPostAttributes>
     public content!: string;
     public isChange!: Boolean;
     public isHidden!: Boolean;
+    public userId!: number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -43,9 +45,17 @@ UserPosts.init({
     isHidden: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+    },
+    userId: {
+        type:DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+            model: "user",
+            key: 'id',
+        }
     }
 }, {
-    tableName: "UserPosts",
+    tableName: "userposts",
     sequelize,
     paranoid: true,
 
