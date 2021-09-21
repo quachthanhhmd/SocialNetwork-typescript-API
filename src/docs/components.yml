@@ -30,6 +30,7 @@ components:
             displayName: Thanh Hai
             gender: male
             birthDay: 11/06/2000
+
     Post: 
       type: object 
       properties:
@@ -38,19 +39,15 @@ components:
         content:
           type: string
         isHidden:
-          type: Boolean
+          type: bool
         isChange: 
-          type: Boolean
+          type: bool
         userId:
           type: number
         createdAt:
           type: date
         updateAt:
           type: date
-        imageLink: 
-          type: array
-          items:
-            type: strings
       example:
         id: 1
         content: Hello, my name is thanh
@@ -59,7 +56,7 @@ components:
         userId: 1 
         createdAt: 2021-09-15T08:11:22.838Z
         updateAt: 2021-09-15T08:11:22.838Z
-        imageLink: ["https://i.stack.imgur.com/HdeKH.jpg", https://i.stack.imgur.com/HdeKH.jpg"]   
+        # imageLink: ["https://cine.megamind.vn/wp-content/uploads/2020/12/tran-duc-bo-mew-mew-300x300.jpg", "https://cine.megamind.vn/wp-content/uploads/2020/12/tran-duc-bo-mew-mew-300x300.jpg"]
 
     Token:
       type: object
