@@ -7,6 +7,8 @@ import UserError from "../constants/apiError/user.contant";
 
 import { ICreatePost } from "../interfaces/post.interface";
 
+
+
 const createPost = async (userId: number, contentPost: ICreatePost): Promise<void> => {
 
     const user = await userService.findUserById(userId);
@@ -30,7 +32,27 @@ const createPost = async (userId: number, contentPost: ICreatePost): Promise<voi
 }
 
 
+const findPostById = async (postId: number) =>{
+
+
+    return db.UserPost.findOne({
+        where: {
+            id: postId
+        },
+        include: [{
+            model: db.Photo,
+            as: "photos",
+            attributes: ["id", "imageLink"],
+        },
+        {
+            model: db.Comment,
+            as: "commets"
+        }]
+    })
+}
+
 
 export default {
     createPost,
+    findPostById
 }

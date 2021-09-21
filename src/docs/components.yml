@@ -30,7 +30,37 @@ components:
             displayName: Thanh Hai
             gender: male
             birthDay: 11/06/2000
-                    
+    Post: 
+      type: object 
+      properties:
+        id: 
+          type: number
+        content:
+          type: string
+        isHidden:
+          type: Boolean
+        isChange: 
+          type: Boolean
+        userId:
+          type: number
+        createdAt:
+          type: date
+        updateAt:
+          type: date
+        imageLink: 
+          type: array
+          items:
+            type: strings
+      example:
+        id: 1
+        content: Hello, my name is thanh
+        isHidden: false
+        isChange: false
+        userId: 1 
+        createdAt: 2021-09-15T08:11:22.838Z
+        updateAt: 2021-09-15T08:11:22.838Z
+        imageLink: ["https://i.stack.imgur.com/HdeKH.jpg", https://i.stack.imgur.com/HdeKH.jpg"]   
+
     Token:
       type: object
       properties:

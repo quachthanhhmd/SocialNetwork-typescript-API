@@ -7,6 +7,8 @@ import {IUserInfoSummary} from "../interfaces/user.interface";
 
 import postService from "../services/post.service";
 
+import AuthError from "../constants/apiError/auth.constant";
+
 
 interface RequestWithUserAndBody extends Request {
     user: IUserInfoSummary,
@@ -25,6 +27,18 @@ const createPost = catchAsync(async (req: RequestWithUserAndBody, res: Response)
 })
 
 
+const getOnePost = catchAsync(async (req: Request, res: Response) => {
+
+    const postId :number = +req.params.postId;
+
+    const post = await postService.findPostById(postId);
+
+    if (!post) throw  AuthError.NotFound;
+
+    res.status(httpStatus.OK).send(post);
+})
+
 export default {
     createPost,
+    getOnePost
 }
