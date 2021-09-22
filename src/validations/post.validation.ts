@@ -3,7 +3,8 @@ import Joi from "joi";
 const createPost = {
     body: Joi.object().keys({
         content: Joi.string().required().max(1000),
-        imageLink: Joi.array().items(Joi.string()),
+        isHidden: Joi.boolean().default(false),
+        file: Joi.array().items(Joi.string()),
     })
 }
 
@@ -16,10 +17,10 @@ const getPost = {
 
 const getPostList = {
 
-    params: Joi.object().keys({
-        limit: Joi.number().min(0).default(8),
-        page: Joi.number().min(0).default(1),
-        query: Joi.string(),
+    query: Joi.object().keys({
+        limit: Joi.number().min(0),
+        page: Joi.number().min(0),
+        search: Joi.string(),
     })
 }
 

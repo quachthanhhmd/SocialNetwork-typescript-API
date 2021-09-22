@@ -250,7 +250,7 @@ const getFullUserInfo = async (userId: number): Promise<User | null> => {
     })
 
     Object.assign(userInfo, userFriend)
-    console.log(userInfo);
+
 
     return userInfo;
 }

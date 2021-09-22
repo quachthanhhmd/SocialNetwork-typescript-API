@@ -4,6 +4,9 @@ import swaggerRouter from "./docs.route";
 import authRoutes from "./auth.route";
 import userRoutes from "./user.route";
 import messageRoutes from "./message.route";
+import postRoutes from "./post.route";
+
+
 
 import env from "../../config/environments";
 
@@ -26,6 +29,10 @@ const indexRouteList: Array<indexRoutesAttributes> = [
     {
         path: "/message",
         route: messageRoutes,
+    },
+    {
+        path: "/post",
+        route: postRoutes,
     }
 ];
 

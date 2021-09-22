@@ -21,10 +21,10 @@ const createPost = catchAsync(async (req: RequestWithUserAndBody, res: Response)
     const userId = req.user!.id;
     const contentPost = req.body;
 
-    await postService.createPost(userId, contentPost);
+    const newPost = await postService.createPost(userId, contentPost);
 
 
-    res.status(httpStatus.OK);
+    res.status(httpStatus.CREATED).send(newPost);
 })
 
 
@@ -40,16 +40,15 @@ const getOnePost = catchAsync(async (req: Request, res: Response) => {
 })
 
 
-// interface RequestWithUserPaging extends Request<any, any, any, ISearchPagination> {
+interface RequestPaging extends Request<any, any, any, ISearchPagination> {
 
-//     //declare user to be sure to login 
-//     user: IUserInfoSummary,
-// }
+    user: IUserInfoSummary,
+}
 
 //get post pagination
-const getPostList = catchAsync(async (req: Request<any, any, any, ISearchPagination>, res: Response) => {
+const getPostList = catchAsync(async (req: RequestPaging, res: Response) => {
 
-
+ 
     const postList = await postService.findPostList(req.query);
 
     res.status(httpStatus.OK).send(postList);

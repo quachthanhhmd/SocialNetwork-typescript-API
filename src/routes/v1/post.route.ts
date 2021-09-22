@@ -14,6 +14,7 @@ router
 
 router.get("/:postId", validate(postValidation.getPost), postRoutes.getOnePost);
 
+export default router;
 
 /**
  * @swagger
@@ -41,18 +42,14 @@ router.get("/:postId", validate(postValidation.getPost), postRoutes.getOnePost);
  *               content:
  *                 type: string
  *                 required: true
- *               imageLink:
+ *               isHidden: 
+ *                 type: Boolean
+ *               file:
  *                 type: array
  *                 items:
  *                   type: string 
  *             example: 
- *               id: 1
  *               content: Hello, my name is thanh
- *               isHidden: false
- *               isChange: false
- *               userId: 1 
- *               createdAt: 2021-09-15T08:11:22.838Z
- *               updateAt: 2021-09-15T08:11:22.838Z
  *               imageLink: ["https://i.stack.imgur.com/HdeKH.jpg", https://i.stack.imgur.com/HdeKH.jpg" ]  
  *   
  *     responses:
@@ -90,7 +87,7 @@ router.get("/:postId", validate(postValidation.getPost), postRoutes.getOnePost);
  *      
  *         
  *     responses:
- *       "201": 
+ *       "200": 
  *         content: 
  *           application/json:
  *             schema:
@@ -139,7 +136,7 @@ router.get("/:postId", validate(postValidation.getPost), postRoutes.getOnePost);
  *           type: number
  *           required: true
  *     responses:
- *       "201": 
+ *       "200": 
  *         $ref: '#/components/schemas/Post'
  *       "500":
  *         $ref: '#/components/responses/InternalError'

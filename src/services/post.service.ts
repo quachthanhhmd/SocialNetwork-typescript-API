@@ -7,6 +7,7 @@ import photoService from "../services/photo.service";
 import UserError from "../constants/apiError/user.contant";
 
 import { ICreatePost } from "../interfaces/post.interface";
+import { Op } from 'sequelize';
 
 
 /**
@@ -15,7 +16,7 @@ import { ICreatePost } from "../interfaces/post.interface";
  * @param {ICreatePost} contentPost 
  * @return {Promise<void>}
  */
-const createPost = async (userId: number, contentPost: ICreatePost): Promise<void> => {
+const createPost = async (userId: number, contentPost: ICreatePost): Promise<Post> => {
 
     const user = await userService.findUserById(userId);
 
@@ -24,17 +25,19 @@ const createPost = async (userId: number, contentPost: ICreatePost): Promise<voi
     const newPost = await Post.create({
 
         userId: userId,
+        isHidden: contentPost.isHidden,
         content: contentPost.content,
 
     })
 
     if (!newPost)
         throw UserError.ServerError;
-
-    if (contentPost.file) {
-        await photoService.createPhoto(newPost.id, contentPost.file);
+ 
+    if (!contentPost.file) {
+        return newPost;
     }
-
+    const newPhotos = await photoService.createPhoto(newPost.id, contentPost.file);
+    return Object.assign(newPost, newPhotos);
 }
 
 /**
@@ -68,22 +71,31 @@ const findPostById = async (postId: number): Promise<Post | null> => {
  */
 const findPostList = async (query: ISearchPagination): Promise<Array<Post> | null> => {
 
-    const queryString : string = query.search? query.search: "";
-    return db.UserPost.findAll({
+   
+
+    const queryString: string = query.search ? `%${query.search}%` : "%%";
+    return await db.UserPost.findAll({
         where: {
-            content: `%${queryString}%`,
+            content: {
+                [Op.like]: queryString,
+            },
         },
         include: [{
             model: db.Photo,
             as: "photos",
             attributes: ["id", "imageLink"],
+            //required: true,
+            //right: true // has no effect, will create an inner join
         },
         {
             model: db.Comment,
             as: "commets"
         }],
+        nest: true,
+        raw: false,
+        order: [['createdAt', 'ASC']],
         limit: query.limit,
-        offset: query.limit* (query.page - 1),
+        offset: query.limit * (query.page - 1),
     })
 }
 

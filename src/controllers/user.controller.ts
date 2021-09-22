@@ -23,10 +23,11 @@ const getOneUser = catchAsync(async (req: Request, res: Response) => {
     const id = +req.params.id;
 
     console.log(id);
-    const user = userService.getFullUserInfo(id);
+    const user = await userService.getFullUserInfo(id);
 
     if (!user) throw UserError.UserNotFound;
 
+    console.log(user);
     res.status(httpStatus.OK).send(user);
 })
 
@@ -67,7 +68,7 @@ const updateBackgroundImage = catchAsync(async (req: Request, res: Response) => 
 //accpet friend
 const sendRequestFriend = catchAsync(async (req: RequestWithUser, res: Response) => {
 
-    console.log(req.user);
+
     const userId = req.user!.id;
     const friendId = +req.params.id;
 

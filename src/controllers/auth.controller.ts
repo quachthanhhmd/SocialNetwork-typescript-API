@@ -33,7 +33,7 @@ const signUp = catchAsync(async (req: Request, res: Response) => {
 
     await Nodemailer.sendMailVerify(req, user!.username, tokenVerifyEmail);
 
-    return res.status(httpStatus.OK).send({ user, tokens });
+    return res.status(httpStatus.CREATED).send({ user, tokens });
 });
 
 
