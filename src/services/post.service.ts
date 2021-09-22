@@ -5,8 +5,9 @@ import userService from "../services/user.service";
 import photoService from "../services/photo.service";
 
 import UserError from "../constants/apiError/user.contant";
+import AuthError from "../constants/apiError/auth.constant";
 
-import { ICreatePost } from "../interfaces/post.interface";
+import { ICreatePost, IUpdatePost } from "../interfaces/post.interface";
 import { Op } from 'sequelize';
 
 
@@ -99,8 +100,45 @@ const findPostList = async (query: ISearchPagination): Promise<Array<Post> | nul
     })
 }
 
+/**
+ * Update post 
+ * @param {number} postId 
+ * @param {IUpdatePost} updateBody 
+ * @return {Promise<void>}
+ */
+const updatePost = async(postId: number, updateBody: IUpdatePost) : Promise<void>=>{
+
+    const post = await Post.findOne({
+        where: {
+            id: postId,
+        }
+    })
+
+    if (!post ) throw AuthError.NotFound;
+
+    if (updateBody.file) {
+        await photoService.updatePhotos(postId, updateBody.file);
+        
+        delete updateBody.file; 
+    }
+    
+    //Add isChange == true
+    Object.assign(updateBody, {isChange: true});
+   
+    await Post.update(
+        updateBody,
+        {
+            where: {
+                id: postId,
+            }
+        }
+    )
+
+}
+
 export default {
     createPost,
     findPostById,
-    findPostList
+    findPostList,
+    updatePost
 }

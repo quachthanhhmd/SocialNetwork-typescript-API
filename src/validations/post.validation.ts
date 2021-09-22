@@ -24,8 +24,21 @@ const getPostList = {
     })
 }
 
+const updatePost = {
+
+    params: Joi.object().keys({
+        postId: Joi.number().required(),
+    }),
+    body: Joi.object().keys({
+        content: Joi.string().max(1000),
+        isHidden: Joi.boolean(),
+        file: Joi.array().items(Joi.string()),
+    })
+}
+
 export default {
     getPostList,
     getPost,
     createPost,
+    updatePost,
 }

@@ -29,6 +29,34 @@ const createPhoto = async (postId: number, fileList: Array<string>): Promise<Arr
     })
 }
 
+/**
+ * Delete all photos of post
+ * @param postId 
+ * @return {Promise<void>}
+ */
+const deleteAllPhoto = async (postId: number): Promise<void> =>{
+
+    await Photo.destroy({
+        where: {
+            postId: postId,
+        },
+        truncate: true
+    })
+}
+
+/**
+ * Update information of post
+ * @param {number} postId 
+ * @param {Array<string>} fileList
+ * @return {Promise<void>} 
+ */
+const updatePhotos = async (postId: number, fileList: Array<string>): Promise<void> =>{
+
+    await deleteAllPhoto(postId);
+    await createPhoto(postId, fileList);
+}
+
 export default {
     createPhoto,
+    updatePhotos
 }

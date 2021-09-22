@@ -12,7 +12,9 @@ router
     .get("/", auth(), validate(postValidation.getPostList), postRoutes.getPostList);
 
 
-router.get("/:postId", validate(postValidation.getPost), postRoutes.getOnePost);
+router
+    .get("/:postId", validate(postValidation.getPost), postRoutes.getOnePost)   
+    .patch("/:postId", auth(), validate(postValidation.updatePost), postRoutes.updatePost);
 
 export default router;
 
@@ -43,14 +45,14 @@ export default router;
  *                 type: string
  *                 required: true
  *               isHidden: 
- *                 type: Boolean
+ *                 type: boolean
  *               file:
  *                 type: array
  *                 items:
  *                   type: string 
  *             example: 
  *               content: Hello, my name is thanh
- *               imageLink: ["https://i.stack.imgur.com/HdeKH.jpg", https://i.stack.imgur.com/HdeKH.jpg" ]  
+ *               imageLink: [https://i.stack.imgur.com/HdeKH.jpg, https://i.stack.imgur.com/HdeKH.jpg ]  
  *   
  *     responses:
  *       "201": 
@@ -104,9 +106,9 @@ export default router;
  *                 updateAt: 2021-09-15T08:11:22.838Z
  *                 file: 
  *                   - id: 1 
- *                     imageLink: "https://i.stack.imgur.com/HdeKH.jpg" 
+ *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg
  *                   - id: 2 
- *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg"      
+ *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg      
  *               - id: 2
  *                 content: Hello, my name is thanh
  *                 isHidden: false
@@ -116,9 +118,9 @@ export default router;
  *                 updateAt: 2021-09-15T08:11:22.838Z
  *                 file: 
  *                   - id: 1 
- *                     imageLink: "https://i.stack.imgur.com/HdeKH.jpg" 
+ *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg 
  *                   - id: 2 
- *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg"  
+ *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg
  *               
  *       "401": 
  *         $ref: '#/components/responses/Unauthorized'
@@ -148,6 +150,51 @@ export default router;
  *         $ref: '#/components/schemas/Post'
  *       "500":
  *         $ref: '#/components/responses/InternalError'
- *  
+ *   
+ *   patch:
+ *     summary: Update post by post Id
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         schema: 
+ *           type: number
+ *           required: true
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object 
+ *             properties:
+ *               content: 
+ *                 type: string 
+ *               isHidden: 
+ *                 type: Boolean
+ *               file:
+ *                 type: array 
+ *                 items:
+ *                   imageLink: 
+ *                     type: string 
+ *             example:
+ *               content: I'm so lazy
+ *               isHidden: true
+ *               file: 
+ *                 - https://i.stack.imgur.com/HdeKH.jpg  
+ *                 - https://i.stack.imgur.com/HdeKH.jpg  
+ *                 - https://i.stack.imgur.com/HdeKH.jpg  
+ *     responses:
+ *       "200":
+ *         description: OK
+ *       "401": 
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'
  */
 
