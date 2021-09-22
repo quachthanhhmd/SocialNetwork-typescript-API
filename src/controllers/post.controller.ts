@@ -10,6 +10,7 @@ import AuthError from "../constants/apiError/auth.constant";
 import { IUserInfoSummary } from "../interfaces/user.interface";
 import { ICreatePost } from '../interfaces/post.interface';
 import { ISearchPagination } from '../interfaces/pagination.interface';
+import catchAsync from '../utils/catchAsync';
 
 
 interface RequestWithUserAndBody extends Request {
@@ -68,13 +69,22 @@ const updatePost = catchAsync(async (req: RequestWithUserAndUpdatePost, res: Res
     const postId: number = +req.params.postId;
     const body: IUpdatePost = req.body;
 
+    const checkOwnPost = await postService.checkOwnPost(req.user!.id, postId);
+
+    if (!checkOwnPost)
+        throw AuthError.Forbidden;
     await postService.updatePost(postId, body);
-
-
     res.status(httpStatus.OK).send({});
 })
 
 
+interface RequestWithUserAndEmoij extends Request {
+    user: IUserInfoSummary,
+    body: IUpdatePost,
+}
+
+//Emoij for pos
+const updateEmoij =catchAsync(async (req:))
 export default {
     createPost,
     getOnePost,

@@ -10,6 +10,7 @@ import Comment from "./comments";
 import UserBackground from "./userBackground";
 import Photo from "./photos";
 import Token from "./token";
+import Emoij from "./emoij";
 
 
 (async () => {
@@ -71,7 +72,8 @@ import Token from "./token";
     UserPost.hasMany(Photo, {as: "photos", foreignKey: "postId"});
     Photo.belongsTo(UserPost, {foreignKey: "postId"});
 
-
+    UserPost.hasOne(Emoij, {foreignKey: "postId"});
+    Emoij.belongsTo(UserPost, {foreignKey: "postId"})
 
     
 

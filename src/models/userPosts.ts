@@ -11,6 +11,7 @@ interface UserPostAttributes {
     isChange?: Boolean,
     isHidden?: Boolean,
     userId: number,
+    emoji?: string,
 }
 
 interface UserPostCreationAttributes extends Optional<UserPostAttributes, "id"> { };
@@ -22,6 +23,7 @@ class UserPosts extends Model<UserPostCreationAttributes, UserPostAttributes>
     public isChange!: Boolean;
     public isHidden!: Boolean;
     public userId!: number;
+    public emoji!: string;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;

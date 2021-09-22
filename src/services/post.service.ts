@@ -33,7 +33,7 @@ const createPost = async (userId: number, contentPost: ICreatePost): Promise<Pos
 
     if (!newPost)
         throw UserError.ServerError;
- 
+
     if (!contentPost.file) {
         return newPost;
     }
@@ -74,7 +74,7 @@ const findPostById = async (postId: number): Promise<Post | null> => {
  */
 const findPostList = async (query: ISearchPagination): Promise<Array<Post> | null> => {
 
-   
+
 
     const queryString: string = query.search ? `%${query.search}%` : "%%";
     return await db.UserPost.findAll({
@@ -106,7 +106,7 @@ const findPostList = async (query: ISearchPagination): Promise<Array<Post> | nul
  * @param {IUpdatePost} updateBody 
  * @return {Promise<void>}
  */
-const updatePost = async(postId: number, updateBody: IUpdatePost) : Promise<void>=>{
+const updatePost = async (postId: number, updateBody: IUpdatePost): Promise<void> => {
 
     const post = await Post.findOne({
         where: {
@@ -114,17 +114,17 @@ const updatePost = async(postId: number, updateBody: IUpdatePost) : Promise<void
         }
     })
 
-    if (!post ) throw AuthError.NotFound;
+    if (!post) throw AuthError.NotFound;
 
     if (updateBody.file) {
         await photoService.updatePhotos(postId, updateBody.file);
-        
-        delete updateBody.file; 
+
+        delete updateBody.file;
     }
-    
+
     //Add isChange == true
-    Object.assign(updateBody, {isChange: true});
-   
+    Object.assign(updateBody, { isChange: true });
+
     await Post.update(
         updateBody,
         {
@@ -136,9 +136,26 @@ const updatePost = async(postId: number, updateBody: IUpdatePost) : Promise<void
 
 }
 
+
+/**
+ * Check wonder if post belongs to user or not
+ * @param {number} userId 
+ * @param {number} postId 
+ * @returns {Promise<Boolean>}
+ */
+const checkOwnPost = async (userId: number, postId: number) : Promise<Boolean> => {
+
+
+    const post = await findPostById(postId);
+
+
+    return (!post) ? false : (post.userId === userId) ? true : false;
+}
+
 export default {
     createPost,
     findPostById,
     findPostList,
-    updatePost
+    updatePost,
+    checkOwnPost
 }

@@ -13,3 +13,8 @@ export interface IUpdatePost {
     file?: Array<string>,
     isChange?: Boolean,
 }
+
+export interface IUpdateEmoij {
+
+    
+}
