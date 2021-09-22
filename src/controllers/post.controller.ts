@@ -92,11 +92,24 @@ const updateEmoij =catchAsync(async (req:RequestWithUserAndEmoij, res: Response)
     await postService.ChangeStateEmoij(userId, postId, req.body);
 
     res.status(httpStatus.OK).send({});
+});
+
+//get info of user who emoij in the post
+const getUserEmoijList =  catchAsync(async (req: Request, res: Response) => {
+
+    const postId: number = +req.params.postId;
+
+    const postEmoijList = await postService.getUserEmoijList(postId);
+
+    res.status(httpStatus.OK).send(postEmoijList);
 })
+
+
 export default {
     createPost,
     getOnePost,
     getPostList,
     updatePost,
     updateEmoij,
+    getUserEmoijList
 }

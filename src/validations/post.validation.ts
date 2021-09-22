@@ -46,10 +46,18 @@ const updateEmoij = {
     })
 }
 
+const getUserEmoijList = {
+    params: Joi.object().keys({
+        postId: Joi.number().required()
+    }),
+}
+
+
 export default {
     getPostList,
     getPost,
     createPost,
     updatePost,
     updateEmoij,
+    getUserEmoijList
 }

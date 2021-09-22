@@ -17,7 +17,8 @@ router
     .patch("/:postId", auth(), validate(postValidation.updatePost), postRoutes.updatePost);
 
 router
-    .patch("/emoij/:postId", auth(), validate(postValidation.updateEmoij), postRoutes.updateEmoij);
+    .patch("/emoij/:postId", auth(), validate(postValidation.updateEmoij), postRoutes.updateEmoij)
+    .get("/emoij/:postId",validate(postValidation.getUserEmoijList), postRoutes.getUserEmoijList)
 
 export default router;
 
@@ -205,6 +206,20 @@ export default router;
 /**
  * @swagger
  * /post/emoij/{postId}:
+ *   get:
+ *     summary: Get a list of user who emoij for this post
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path 
+ *         name: postId 
+ *         schema: 
+ *           type: number
+ *           required: true
+ *     responses:
+ *       "200": 
+ *         $ref: '#/components/schemas/Post'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'
  *   patch:
  *     summary: update emoij 
  *     tags: [Post]

@@ -13,6 +13,8 @@ import AuthError from "../constants/apiError/auth.constant";
 
 import { ICreatePost, IUpdatePost } from "../interfaces/post.interface";
 import { Op } from 'sequelize';
+import userProfileService from './userProfile.service';
+import Users from '../models/user';
 
 
 /**
@@ -183,6 +185,29 @@ const ChangeStateEmoij = async (userId: number, postId: number, bodyUpdate: IUpd
     
 }
 
+interface IViewUserEmoij {
+    postId: number,
+    userList: Array<Users> | null,
+}
+
+//get user who emoij the post
+const getUserEmoijList = async (postId: number) => {
+
+
+    const post = await findPostById(postId);
+    
+    if (!post) throw AuthError.NotFound;
+
+    const userEmoijList = await userService.findEmoijUserList(postId);
+
+    const emoijPostList: IViewUserEmoij = {
+        postId: post.id,
+        userList: userEmoijList
+    }
+
+    return emoijPostList;
+}
+
 
 export default {
     createPost,
@@ -190,5 +215,6 @@ export default {
     findPostList,
     updatePost,
     checkOwnPost,
-    ChangeStateEmoij
+    ChangeStateEmoij,
+    getUserEmoijList
 }

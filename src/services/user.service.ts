@@ -17,7 +17,8 @@ import { comparePasswordHash } from './../config/bcrypt';
 import { CreateUserProfile, IUserUpdate, IUserProfileUpdate } from "../interfaces/user.interface";
 import { IAllInfoUser } from "../interfaces/user.interface";
 
-
+import { EMOIJ } from "../constants/emoji.constant";
+import { Op } from "sequelize";
 
 
 /**
@@ -339,15 +340,48 @@ const refuseFriendRequest = async (userId: number, parnerId: number): Promise<vo
  * @param {number} parnerId
  * @return {Promise<void>} 
  */
-const changeFollow = async (userId: number, parnerId: number) : Promise<void> => {
+const changeFollow = async (userId: number, parnerId: number): Promise<void> => {
 
     const parner = findUserById(parnerId);
-    
+
     if (!parner) throw UserError.UserNotFound;
 
     await friendService.changeFollow(userId, parnerId);
 
 }
+
+/**
+ * 
+ * @param {number} postId 
+ * @returns {Promise<Array<User> | null>}
+ */
+const findEmoijUserList = async (postId: number): Promise<Array<User> | null> => {
+
+    return await db.User.findAll({
+        attributes: ["id"],
+        include: [
+            {
+                model: db.UserProfile,
+                as: "profile",
+                attributes: ["firstName", "lastName", "avtImage"],
+            },
+            {
+                model: db.Emoij,
+                where: {
+                    postId: postId,
+                    type: {
+                        [Op.not]: EMOIJ.NONE,
+                    }
+                },
+                required: false,
+                right: true,
+                attributes: ["type"],
+            }],
+        raw: true,
+        nest: true
+    })
+}
+
 
 export default {
     findUserById,
@@ -364,4 +398,5 @@ export default {
     acceptRequetFriend,
     refuseFriendRequest,
     changeFollow,
+    findEmoijUserList
 }

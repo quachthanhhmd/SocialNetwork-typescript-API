@@ -94,4 +94,5 @@ export default {
     UserPost,
     UserFriend,
     Comment,
+    Emoij,
 }
