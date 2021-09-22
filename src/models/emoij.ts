@@ -1,16 +1,12 @@
+import { EMOIJ } from './../constants/emoji.constant';
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/sequelize";
 
 
 interface EmojiAttributes {
     id?: number,
-    sad?: number,
-    wow?: number,
-    haha?: number,
-    angry?: number,
-    love?: number,
-    care?: number,
-    like?: number,
+    type?: string,
+    userId: number,
     postId: number,
 }
 
@@ -19,14 +15,9 @@ interface EmojiCreationAttributes extends Optional<EmojiAttributes, "id"> { };
 
 class Emoij extends Model<EmojiCreationAttributes, EmojiAttributes> implements EmojiAttributes {
     public readonly id!: number;
-    public sad!: number;
-    public wow!: number;
-    public haha!: number;
-    public angry!: number;
-    public love!: number;
-    public care!: number;
-    public like!: number;
-    public postId!: number;
+    public type!: string;
+    public readonly userId!: number;
+    public readonly postId!: number;
 };
 
 Emoij.init({
@@ -36,33 +27,20 @@ Emoij.init({
         allowNull: true,
         primaryKey: true,
     },
-    sad: {
-        type: DataTypes.NUMBER,
-        defaultValue: 0,
+    type: {
+        type: DataTypes.STRING(10),
+        defaultValue: EMOIJ.NONE,
+        validate: {
+            isIn: [[EMOIJ.ANGRY, EMOIJ.CARE, EMOIJ.HAHA, EMOIJ.LIKE, EMOIJ.LOVE, EMOIJ.NONE, EMOIJ.SAD, EMOIJ.WOW]]
+        }
     },
-    wow: {
-        type: DataTypes.NUMBER,
-        defaultValue: 0,
-    },
-    haha: {
-        type: DataTypes.NUMBER,
-        defaultValue: 0,
-    },
-    angry: {
-        type: DataTypes.NUMBER,
-        defaultValue: 0,
-    },
-    love: {
-        type: DataTypes.NUMBER,
-        defaultValue: 0,
-    },
-    care: {
-        type: DataTypes.NUMBER,
-        defaultValue: 0,
-    },
-    like: {
-        type: DataTypes.NUMBER,
-        defaultValue: 0,
+    userId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+            model: "user",
+            key: "id"
+        }
     },
     postId: {
         type: DataTypes.INTEGER.UNSIGNED,

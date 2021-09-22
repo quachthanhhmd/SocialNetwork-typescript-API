@@ -14,7 +14,3 @@ export interface IUpdatePost {
     isChange?: Boolean,
 }
 
-export interface IUpdateEmoij {
-
-    
-}

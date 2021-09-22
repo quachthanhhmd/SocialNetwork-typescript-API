@@ -1,3 +1,4 @@
+import { IUpdateEmoij } from './../interfaces/emoij.interface';
 import { IUpdatePost } from './../interfaces/post.interface';
 
 import { Request, Response, NextFunction } from "express";
@@ -10,7 +11,6 @@ import AuthError from "../constants/apiError/auth.constant";
 import { IUserInfoSummary } from "../interfaces/user.interface";
 import { ICreatePost } from '../interfaces/post.interface';
 import { ISearchPagination } from '../interfaces/pagination.interface';
-import catchAsync from '../utils/catchAsync';
 
 
 interface RequestWithUserAndBody extends Request {
@@ -80,14 +80,23 @@ const updatePost = catchAsync(async (req: RequestWithUserAndUpdatePost, res: Res
 
 interface RequestWithUserAndEmoij extends Request {
     user: IUserInfoSummary,
-    body: IUpdatePost,
+    body: IUpdateEmoij,
 }
 
 //Emoij for pos
-const updateEmoij =catchAsync(async (req:))
+const updateEmoij =catchAsync(async (req:RequestWithUserAndEmoij, res: Response)=> {
+
+    const userId = req.user!.id;
+    const postId: number = +req.params.postId;
+
+    await postService.ChangeStateEmoij(userId, postId, req.body);
+
+    res.status(httpStatus.OK).send({});
+})
 export default {
     createPost,
     getOnePost,
     getPostList,
-    updatePost
+    updatePost,
+    updateEmoij,
 }

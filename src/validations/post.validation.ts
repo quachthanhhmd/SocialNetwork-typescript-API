@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { EMOIJ } from "../constants/emoji.constant";
 
 const createPost = {
     body: Joi.object().keys({
@@ -36,9 +37,19 @@ const updatePost = {
     })
 }
 
+const updateEmoij = {
+    params: Joi.object().keys({
+        postId: Joi.number().required()
+    }),
+    body: Joi.object().keys({
+        type: Joi.string().valid(EMOIJ.ANGRY, EMOIJ.CARE, EMOIJ.HAHA, EMOIJ.LIKE, EMOIJ.LOVE, EMOIJ.NONE, EMOIJ.SAD, EMOIJ.WOW),
+    })
+}
+
 export default {
     getPostList,
     getPost,
     createPost,
     updatePost,
+    updateEmoij,
 }

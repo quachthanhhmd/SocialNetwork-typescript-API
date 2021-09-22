@@ -10,11 +10,13 @@ import Comment from "./models/comments";
 import UserBackground from "./models/userBackground";
 import Photo from "./models/photos";
 import Token from "./models/token";
+import Emoij from "./models/emoij";
 
 (async () => {
 
     //DON'T DROP ALL TABLE IN OTHER TYPES EXCEPT DEVELOPMENT
 
+    await Emoij.drop();
     await Token.drop();
     await Photo.drop();
     await UserBackground.drop();
@@ -29,6 +31,7 @@ import Token from "./models/token";
 
     db;
 
+    
     await User.sync({ force: true });
     await UserPost.sync({ force: true });
     await UserProfile.sync({ force: true });
@@ -39,4 +42,5 @@ import Token from "./models/token";
     await Photo.sync({ force: true });
     await UserBackground.sync({ force: true });
     await Token.sync({ force: true });
+    await Emoij.sync({ force: true });
 })();

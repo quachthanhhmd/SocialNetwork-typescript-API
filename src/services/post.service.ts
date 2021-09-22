@@ -1,8 +1,12 @@
+import { EMOIJ } from './../constants/emoji.constant';
+import { IUpdateEmoij } from './../interfaces/emoij.interface';
 import { ISearchPagination } from './../interfaces/pagination.interface';
 import db from "../models/index";
 import Post from "../models/userPosts";
+
 import userService from "../services/user.service";
 import photoService from "../services/photo.service";
+import emoijService from "../services/emoij.service";
 
 import UserError from "../constants/apiError/user.contant";
 import AuthError from "../constants/apiError/auth.constant";
@@ -143,7 +147,7 @@ const updatePost = async (postId: number, updateBody: IUpdatePost): Promise<void
  * @param {number} postId 
  * @returns {Promise<Boolean>}
  */
-const checkOwnPost = async (userId: number, postId: number) : Promise<Boolean> => {
+const checkOwnPost = async (userId: number, postId: number): Promise<Boolean> => {
 
 
     const post = await findPostById(postId);
@@ -152,10 +156,39 @@ const checkOwnPost = async (userId: number, postId: number) : Promise<Boolean> =
     return (!post) ? false : (post.userId === userId) ? true : false;
 }
 
+
+const ChangeStateEmoij = async (userId: number, postId: number, bodyUpdate: IUpdateEmoij) => {
+
+    const post = await findPostById(postId);
+
+    if (!post) throw AuthError.NotFound;
+
+
+    const checkStateUpdate = await emoijService.updateEmoij(userId, postId, bodyUpdate);
+
+    // 1 if emoij, -1 if unemoij
+    // if click into emoij 2 times, emoij will be delete, contrary, change emoij state
+    const state: number = checkStateUpdate? 1: -1;
+
+    //update post state
+    await Post.update(
+        { totalEmoji: post.totalEmoji + state },
+        {
+            where: {
+                userId: userId,
+            }
+        }
+    );
+  
+    
+}
+
+
 export default {
     createPost,
     findPostById,
     findPostList,
     updatePost,
-    checkOwnPost
+    checkOwnPost,
+    ChangeStateEmoij
 }

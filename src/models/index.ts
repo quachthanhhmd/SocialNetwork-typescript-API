@@ -75,7 +75,8 @@ import Emoij from "./emoij";
     UserPost.hasOne(Emoij, {foreignKey: "postId"});
     Emoij.belongsTo(UserPost, {foreignKey: "postId"})
 
-    
+    User.hasMany(Emoij, {foreignKey : "userId"});
+    Emoij.belongsTo(User, { foreignKey: "userId"});
 
 
 })();

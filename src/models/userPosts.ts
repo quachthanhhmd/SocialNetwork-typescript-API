@@ -11,7 +11,7 @@ interface UserPostAttributes {
     isChange?: Boolean,
     isHidden?: Boolean,
     userId: number,
-    emoji?: string,
+    totalEmoji?: number,
 }
 
 interface UserPostCreationAttributes extends Optional<UserPostAttributes, "id"> { };
@@ -23,7 +23,7 @@ class UserPosts extends Model<UserPostCreationAttributes, UserPostAttributes>
     public isChange!: Boolean;
     public isHidden!: Boolean;
     public userId!: number;
-    public emoji!: string;
+    public totalEmoji!: number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -47,6 +47,10 @@ UserPosts.init({
     isHidden: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+    },
+    totalEmoji: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
     },
     userId: {
         type:DataTypes.INTEGER.UNSIGNED,

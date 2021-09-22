@@ -16,6 +16,9 @@ router
     .get("/:postId", validate(postValidation.getPost), postRoutes.getOnePost)   
     .patch("/:postId", auth(), validate(postValidation.updatePost), postRoutes.updatePost);
 
+router
+    .patch("/emoij/:postId", auth(), validate(postValidation.updateEmoij), postRoutes.updateEmoij);
+
 export default router;
 
 /**
@@ -52,7 +55,7 @@ export default router;
  *                   type: string 
  *             example: 
  *               content: Hello, my name is thanh
- *               imageLink: [https://i.stack.imgur.com/HdeKH.jpg, https://i.stack.imgur.com/HdeKH.jpg ]  
+ *               file: [https://i.stack.imgur.com/HdeKH.jpg, https://i.stack.imgur.com/HdeKH.jpg ]  
  *   
  *     responses:
  *       "201": 
@@ -198,3 +201,37 @@ export default router;
  *         $ref: '#/components/responses/InternalError'
  */
 
+
+/**
+ * @swagger
+ * /post/emoij/{postId}:
+ *   patch:
+ *     summary: update emoij 
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: postId 
+ *         schema: 
+ *           type: number
+ *           required: true
+ *     requestBody:
+ *       require: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type: 
+ *                 type: string 
+ *                 enum: [like, haha, sad, angry, wow, none, care, love]
+ *             example:
+ *               type: like
+ *     responses:
+ *       "200": 
+ *         $ref: '#/components/schemas/Post'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'
+ *   
+ */
