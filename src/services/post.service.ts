@@ -60,7 +60,9 @@ const findPostById = async (postId: number): Promise<Post | null> => {
         {
             model: db.Comment,
             as: "commets"
-        }]
+        }],
+        nest: true,
+        raw: false,
     })
 }
 
@@ -84,8 +86,6 @@ const findPostList = async (query: ISearchPagination): Promise<Array<Post> | nul
             model: db.Photo,
             as: "photos",
             attributes: ["id", "imageLink"],
-            //required: true,
-            //right: true // has no effect, will create an inner join
         },
         {
             model: db.Comment,

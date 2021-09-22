@@ -11,7 +11,7 @@ const createPost = {
 
 const getPost = {
     params: Joi.object().keys({
-        id: Joi.number().required()
+        postId: Joi.number().required()
     })
 }
 

@@ -102,7 +102,11 @@ export default router;
  *                 userId: 1 
  *                 createdAt: 2021-09-15T08:11:22.838Z
  *                 updateAt: 2021-09-15T08:11:22.838Z
- *                 imageLink: ["https://i.stack.imgur.com/HdeKH.jpg", https://i.stack.imgur.com/HdeKH.jpg"]      
+ *                 file: 
+ *                   - id: 1 
+ *                     imageLink: "https://i.stack.imgur.com/HdeKH.jpg" 
+ *                   - id: 2 
+ *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg"      
  *               - id: 2
  *                 content: Hello, my name is thanh
  *                 isHidden: false
@@ -110,7 +114,11 @@ export default router;
  *                 userId: 1 
  *                 createdAt: 2021-09-15T08:11:22.838Z
  *                 updateAt: 2021-09-15T08:11:22.838Z
- *                 imageLink: ["https://i.stack.imgur.com/HdeKH.jpg", https://i.stack.imgur.com/HdeKH.jpg"] 
+ *                 file: 
+ *                   - id: 1 
+ *                     imageLink: "https://i.stack.imgur.com/HdeKH.jpg" 
+ *                   - id: 2 
+ *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg"  
  *               
  *       "401": 
  *         $ref: '#/components/responses/Unauthorized'
