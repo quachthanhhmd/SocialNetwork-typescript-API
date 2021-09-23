@@ -11,8 +11,8 @@ import AuthError from "../constants/apiError/auth.constant";
 import { IUserInfoSummary } from "../interfaces/user.interface";
 import { ICreatePost } from '../interfaces/post.interface';
 import { IPagination, ISearchPagination } from '../interfaces/pagination.interface';
-import { IUpdateEmoij } from './../interfaces/emoij.interface';
-import { IUpdatePost } from './../interfaces/post.interface';
+import { IUpdateEmoij } from '../interfaces/emoij.interface';
+import { IUpdatePost } from '../interfaces/post.interface';
 
 
 
@@ -120,16 +120,20 @@ const createComment = catchAsync(async (req: RequestWithUser, res: Response) => 
     const postId : number = +req.params.postId;
     const userId: number = req.user!.id;
 
-    await commentService.createComment(userId, postId, req.body!.content);
+    const newComment = await commentService.createComment(userId, postId, req.body!.content);
 
-    res.status(httpStatus.CREATED).send({});
+    res.status(httpStatus.CREATED).send(newComment);
 })
 
 
 
 const getUserCommentList = catchAsync(async (req: Request<any, any, any, IPagination>, res: Response) => {
 
+    const postId: number = +req.params.postId;
     
+    const userCommentList = await postService.getCommentUserList(postId, req.query);
+
+    res.status(httpStatus.OK).send(userCommentList);
 })
 
 export default {
@@ -140,6 +144,6 @@ export default {
     updateEmoij,
     getUserEmoijList,
     createComment,
-
+    getUserCommentList
 
 }

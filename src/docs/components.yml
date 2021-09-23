@@ -39,9 +39,9 @@ components:
         content:
           type: string
         isHidden:
-          type: bool
+          type: boolean
         isChange: 
-          type: bool
+          type: boolean
         userId:
           type: number
         createdAt:
@@ -56,8 +56,6 @@ components:
         userId: 1 
         createdAt: 2021-09-15T08:11:22.838Z
         updateAt: 2021-09-15T08:11:22.838Z
-        # imageLink: ["https://cine.megamind.vn/wp-content/uploads/2020/12/tran-duc-bo-mew-mew-300x300.jpg", "https://cine.megamind.vn/wp-content/uploads/2020/12/tran-duc-bo-mew-mew-300x300.jpg"]
-
     Token:
       type: object
       properties:
@@ -82,6 +80,31 @@ components:
         refesh:
           - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
             expire: 2021-09-15T08:11:22.838Z
+    Comment:
+      type: object
+      properties:
+        id: 
+          type: number
+        postId:
+          type: number
+        userId: 
+          type: number 
+        ischange:
+          type: boolean
+        content:
+          type: string
+        createdAt: 
+          type: date 
+        updateAt:
+          type: date 
+      example:
+        id: 1
+        userId: 1
+        postId: 1 
+        isChange: false 
+        content: You are very beautiful
+        createdAt: 2021-09-15T08:11:22.838Z
+        updateAt: 2021-09-15T08:11:22.838Z
     Messages: 
       type: array
       items:
@@ -109,8 +132,7 @@ components:
           content: I'll show u my picture.
           link: https://cine.megamind.vn/wp-content/uploads/2020/12/tran-duc-bo-mew-mew-300x300.jpg
           type: image
-          status: waiting
-            
+          status: waiting        
     Error:
       type: object
       properties:

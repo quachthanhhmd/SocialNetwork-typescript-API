@@ -3,13 +3,13 @@ import Comment from "../models/comments";
 
 /**
  * Create a comment for post 
- * @param userId 
- * @param postId 
- * @param content 
+ * @param {number} userId 
+ * @param {number} postId 
+ * @param {string} content 
  */
-const createComment = async (userId: number, postId: number, content: string) => {
+const createComment = async (userId: number, postId: number, content: string) : Promise<Comment> => {
 
-    await Comment.create({
+    return await Comment.create({
         userId: userId,
         postId: postId,
         content: content,

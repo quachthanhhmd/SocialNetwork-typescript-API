@@ -88,8 +88,7 @@ router.post("/reset-password", authRouter.resetPassword);
  *                 user:
  *                   $ref: '#/components/schemas/User'
  *                 token: 
- *                   type: string
- *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJpYXQiOjE2MzE4MDQxNzUsImV4cCI6MTYzNTQ1NDU3NSwidHlwZSI6InZlcmlmeUVtYWlsIn0.Pfzx0bEMczqxxBW58eEw6wL0POx_Ze6alDhHeD_HaOQ
+ *                   $ref: '#/components/schemas/Token'
  *                   
  *       "400":
  *         $ref: '#/components/responses/DuplicateUsername'

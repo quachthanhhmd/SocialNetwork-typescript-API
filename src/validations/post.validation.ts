@@ -62,6 +62,15 @@ const createComment = {
     })
 }
 
+const getPagingUserComment  = {
+    params: Joi.object().keys({
+        postId: Joi.number().required()
+    }),
+    query: Joi.object().keys({
+        limit: Joi.number().min(0).default(8),
+        page: Joi.number().min(0).default(1),
+    })
+}
 
 export default {
     getPostList,
@@ -70,5 +79,6 @@ export default {
     updatePost,
     updateEmoij,
     getUserEmoijList,
-    createComment
+    createComment,
+    getPagingUserComment
 }

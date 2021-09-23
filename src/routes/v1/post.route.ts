@@ -21,8 +21,8 @@ router
     .get("/emoij/:postId",validate(postValidation.getUserEmoijList), postRoutes.getUserEmoijList)
 
 router
-    .post("/comment/:postId", auth(), validate(postValidation.createComment), postRoutes.createComment);
-
+    .post("/comment/:postId", auth(), validate(postValidation.createComment), postRoutes.createComment)
+    .get("/comment/:postId", validate(postValidation.getPagingUserComment), postRoutes.getUserCommentList);
 export default router;
 
 /**
@@ -63,7 +63,11 @@ export default router;
  *   
  *     responses:
  *       "201": 
- *         $ref: '#/components/schemas/Post'
+ *         description: Post new Post sucess
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
  *       "401": 
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -220,7 +224,11 @@ export default router;
  *           required: true
  *     responses:
  *       "200": 
- *         $ref: '#/components/schemas/Post'
+ *         description: Create new comment success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
  *       "500":
  *         $ref: '#/components/responses/InternalError'
  *   patch:
@@ -297,4 +305,72 @@ export default router;
  *       "500":
  *         $ref: '#/components/responses/InternalError'
  *   
+ */
+
+
+/**
+ * @swagger
+ * /post/comment/{postId}:
+ *   get:
+ *     summary: Get a list of user who comment for this post
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path 
+ *         name: postId 
+ *         schema: 
+ *           type: number
+ *           required: true
+ *       - in: query
+ *         name: limit  
+ *         schema:
+ *           type: number
+ *           required: true
+ *       - in: query
+ *         name: page 
+ *         schema:
+ *           type: number
+ *           required: true
+ *     responses:
+ *       "200": 
+ *         description: get comment sucess
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Comment'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'
+ *   post: 
+ *     description: Create new comment
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId 
+ *         schema:
+ *           type: number
+ *           required: true
+ *     requestBody:
+ *       content: 
+ *         application/json:
+ *           schema:
+ *             type: object 
+ *             properties: 
+ *               content:
+ *                 type: string
+ *             example:
+ *               content: You are very beautiful.
+ *     responses:
+ *       "201":
+ *         description: Create new comment success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Comment'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'     
  */
