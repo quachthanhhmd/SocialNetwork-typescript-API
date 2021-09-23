@@ -47,8 +47,11 @@ import Emoij from "./emoij";
 
 
     //Post with Comments
-    UserPost.hasMany(Comment, {as: "commets"});
+    UserPost.hasMany(Comment, {as: "commets", foreignKey: "postId"});
     Comment.belongsTo(UserPost);
+
+    User.hasMany(Comment, {foreignKey: "userId"});
+    Comment.belongsTo(User, {foreignKey: "userId"});
 
     User.hasMany(UserBackground, {as :"backgrounds"});
     UserBackground.belongsTo(User);

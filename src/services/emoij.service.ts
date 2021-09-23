@@ -8,31 +8,6 @@ import { EMOIJ } from "../constants/emoji.constant";
 
 
 /**
- * Find a list people whoe emoij.
- * @param postId 
- * @returns {Promise<Array<Emoij | null}
- */
-const findEmoijUserList = async (postId: number): Promise<Array<Emoij> | null> => {
-
-    return await Emoij.findAll({
-        attributes: ["type", "userId"],
-        where: {
-            postId: postId,
-            type: {
-                [Op.ne]: EMOIJ.NONE,
-            }
-        },
-        include: [{
-            model: db.User,
-            attributes: ["id", "displayName", "avtImage"],
-        }],
-        raw: false,
-        plain: true,
-    })
-}
-
-
-/**
  * 
  * @param {number} postId 
  * @param {number} userId 
@@ -100,5 +75,4 @@ const updateEmoij = async (userId: number, postId: number, updateBody: IUpdateEm
 export default {
     createEmoij,
     updateEmoij,
-    findEmoijUserList,
 }
