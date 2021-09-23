@@ -1,3 +1,4 @@
+import { IPagination } from './../interfaces/pagination.interface';
 import httpStatus from "http-status";
 
 import ApiError from "../utils/ApiError";
@@ -383,6 +384,34 @@ const findEmoijUserList = async (postId: number): Promise<Array<User> | null> =>
 }
 
 
+const findCommentUserList = async(postId: number, paging : IPagination) =>{
+
+    return await db.User.findAll({
+        attributes: ["id"],
+        include: [
+            { 
+                model: db.UserProfile,
+                as: "profile",
+                attributes: ["firstName", "lastName", "avtImage"],
+            },
+            {
+                model: db.Comment,
+                where: {
+                    postId: postId
+                },
+                required: false,
+                right: true,
+                attributes: ["id", "content", "isChange"],
+            }
+        ],
+        limit: paging.limit,
+        offset: paging.limit * (paging.page - 1),
+        raw: true,
+        nest: true
+    })
+}
+
+
 export default {
     findUserById,
     findUserbyUsername,
@@ -398,5 +427,6 @@ export default {
     acceptRequetFriend,
     refuseFriendRequest,
     changeFollow,
-    findEmoijUserList
+    findEmoijUserList,
+    findCommentUserList,
 }

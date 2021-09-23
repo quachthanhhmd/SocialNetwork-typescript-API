@@ -1,16 +1,19 @@
-import { IUpdateEmoij } from './../interfaces/emoij.interface';
-import { IUpdatePost } from './../interfaces/post.interface';
 
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import catchAsync from "../utils/catchAsync";
 
 import postService from "../services/post.service";
+import commentService from '../services/comment.service';
+
 import AuthError from "../constants/apiError/auth.constant";
 
 import { IUserInfoSummary } from "../interfaces/user.interface";
 import { ICreatePost } from '../interfaces/post.interface';
-import { ISearchPagination } from '../interfaces/pagination.interface';
+import { IPagination, ISearchPagination } from '../interfaces/pagination.interface';
+import { IUpdateEmoij } from './../interfaces/emoij.interface';
+import { IUpdatePost } from './../interfaces/post.interface';
+
 
 
 interface RequestWithUserAndBody extends Request {
@@ -104,6 +107,30 @@ const getUserEmoijList =  catchAsync(async (req: Request, res: Response) => {
     res.status(httpStatus.OK).send(postEmoijList);
 })
 
+//create comments for post
+interface RequestWithUser extends Request {
+    user: IUserInfoSummary,
+    body: {
+        content: string
+    }
+}
+
+const createComment = catchAsync(async (req: RequestWithUser, res: Response) => {
+
+    const postId : number = +req.params.postId;
+    const userId: number = req.user!.id;
+
+    await commentService.createComment(userId, postId, req.body!.content);
+
+    res.status(httpStatus.CREATED).send({});
+})
+
+
+
+const getUserCommentList = catchAsync(async (req: Request<any, any, any, IPagination>, res: Response) => {
+
+    
+})
 
 export default {
     createPost,
@@ -111,5 +138,8 @@ export default {
     getPostList,
     updatePost,
     updateEmoij,
-    getUserEmoijList
+    getUserEmoijList,
+    createComment,
+
+
 }

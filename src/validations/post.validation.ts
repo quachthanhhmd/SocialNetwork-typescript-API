@@ -53,11 +53,22 @@ const getUserEmoijList = {
 }
 
 
+const createComment = {
+    params: Joi.object().keys({
+        postId: Joi.number().required()
+    }),
+    body: Joi.object().keys({
+        content: Joi.string().required(),
+    })
+}
+
+
 export default {
     getPostList,
     getPost,
     createPost,
     updatePost,
     updateEmoij,
-    getUserEmoijList
+    getUserEmoijList,
+    createComment
 }

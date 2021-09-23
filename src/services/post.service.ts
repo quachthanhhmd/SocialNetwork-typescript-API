@@ -1,6 +1,6 @@
 import { EMOIJ } from './../constants/emoji.constant';
 import { IUpdateEmoij } from './../interfaces/emoij.interface';
-import { ISearchPagination } from './../interfaces/pagination.interface';
+import { IPagination, ISearchPagination } from './../interfaces/pagination.interface';
 import db from "../models/index";
 import Post from "../models/userPosts";
 
@@ -185,7 +185,7 @@ const ChangeStateEmoij = async (userId: number, postId: number, bodyUpdate: IUpd
     
 }
 
-interface IViewUserEmoij {
+interface IViewUserPost {
     postId: number,
     userList: Array<Users> | null,
 }
@@ -200,7 +200,7 @@ const getUserEmoijList = async (postId: number) => {
 
     const userEmoijList = await userService.findEmoijUserList(postId);
 
-    const emoijPostList: IViewUserEmoij = {
+    const emoijPostList: IViewUserPost = {
         postId: post.id,
         userList: userEmoijList
     }
@@ -209,6 +209,21 @@ const getUserEmoijList = async (postId: number) => {
 }
 
 
+const getCommentUserList = async (postId: number, paging: IPagination) => {
+
+    const post = await findPostById(postId);
+
+    if (!post) throw AuthError.NotFound;
+
+    const userCommentList = await userService.findCommentUserList(postId, paging);
+
+
+    return {
+        postId: postId,
+        userList: userCommentList,
+    }
+}
+
 export default {
     createPost,
     findPostById,
@@ -216,5 +231,6 @@ export default {
     updatePost,
     checkOwnPost,
     ChangeStateEmoij,
-    getUserEmoijList
+    getUserEmoijList,
+    getCommentUserList
 }

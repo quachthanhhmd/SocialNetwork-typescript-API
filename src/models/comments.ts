@@ -5,7 +5,7 @@ interface CommentAttributes {
 
     id?: number,
     content: string,
-    isChange: Boolean,
+    isChange?: Boolean,
     postId: number, 
     userId: number,
 }

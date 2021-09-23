@@ -20,6 +20,9 @@ router
     .patch("/emoij/:postId", auth(), validate(postValidation.updateEmoij), postRoutes.updateEmoij)
     .get("/emoij/:postId",validate(postValidation.getUserEmoijList), postRoutes.getUserEmoijList)
 
+router
+    .post("/comment/:postId", auth(), validate(postValidation.createComment), postRoutes.createComment);
+
 export default router;
 
 /**
@@ -245,7 +248,52 @@ export default router;
  *               type: like
  *     responses:
  *       "200": 
- *         $ref: '#/components/schemas/Post'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 postId:
+ *                   type: number
+ *                 userList:
+ *                   type: array
+ *                   items: 
+ *                     type: object
+ *                     properties:
+ *                       id: 
+ *                         type: number
+ *                       profile: 
+ *                         type: object 
+ *                         properties:
+ *                           firstName:
+ *                             type: string
+ *                           lastName: 
+ *                             type: string
+ *                           avtImage:
+ *                             type: string
+ *                       Emoij: 
+ *                         type: object 
+ *                         properties:
+ *                           type:
+ *                             type: string
+ *               example: 
+ *                 postId: 1
+ *                 userList:
+ *                   - id: 1 
+ *                     profile: 
+ *                       firstName: Thanh
+ *                       lastName: Hai    
+ *                       avtImage: https://i.stack.imgur.com/HdeKH.jpg
+ *                     Emoij:
+ *                       type: like
+ *                   - id: 2
+ *                     profile:     
+ *                       firstName: Quach
+ *                       lastName: Thanh
+ *                       avtImage: https://i.stack.imgur.com/HdeKH.jpg
+ *                     Emoij:
+ *                       type: love            
+ *                                            
  *       "500":
  *         $ref: '#/components/responses/InternalError'
  *   
