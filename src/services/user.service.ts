@@ -383,10 +383,15 @@ const findEmoijUserList = async (postId: number): Promise<Array<User> | null> =>
     })
 }
 
-
+/**
+ * 
+ * @param  {number} postId 
+ * @param paging 
+ * @returns 
+ */
 const findCommentUserList = async(postId: number, paging : IPagination) =>{
 
-    return await db.User.findAll({
+    const userCommentList =  await db.User.findAndCountAll({
         attributes: ["id"],
         include: [
             { 
@@ -401,14 +406,22 @@ const findCommentUserList = async(postId: number, paging : IPagination) =>{
                 },
                 required: false,
                 right: true,
-                attributes: ["id", "content", "isChange"],
+                attributes: ["id", "content", "isChange", "updatedAt"],
             }
         ],
         limit: paging.limit,
         offset: paging.limit * (paging.page - 1),
         raw: true,
         nest: true
-    })
+    });
+
+    return {
+        result: userCommentList.rows, 
+        totalResult: userCommentList.count,
+        totalPage: userCommentList.count / paging.limit,
+        limit: paging.limit,
+        page: paging.page,
+    }
 }
 
 

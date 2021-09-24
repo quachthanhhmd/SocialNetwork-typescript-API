@@ -244,7 +244,12 @@ const getUserEmoijList = async (postId: number) => {
     return emoijPostList;
 }
 
-
+/**
+ * Get users commeting on the post
+ * @param {number} postId 
+ * @param {IPagination} paging 
+ * @returns 
+ */
 const getCommentUserList = async (postId: number, paging: IPagination) => {
 
     const post = await findPostById(postId);
@@ -254,10 +259,7 @@ const getCommentUserList = async (postId: number, paging: IPagination) => {
     const userCommentList = await userService.findCommentUserList(postId, paging);
 
 
-    return {
-        postId: postId,
-        userList: userCommentList,
-    }
+    return Object.assign({postId}, userCommentList);
 }
 
 export default {

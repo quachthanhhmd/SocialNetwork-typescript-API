@@ -351,7 +351,7 @@ export default router;
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Comment'
+ *               $ref: '#/components/schemas/Comments'
  *       "500":
  *         $ref: '#/components/responses/InternalError'
  *   post: 

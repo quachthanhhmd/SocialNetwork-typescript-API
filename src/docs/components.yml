@@ -80,31 +80,71 @@ components:
         refesh:
           - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
             expire: 2021-09-15T08:11:22.838Z
-    Comment:
+    Comments:
       type: object
       properties:
-        id: 
+        postId: 
           type: number
-        postId:
+        result:
+          type: array
+          items:
+            id: 
+              type: number
+            profile:
+              type: object 
+              properties:
+                firstName:
+                  type: string 
+                lastName:
+                  type: string
+                avtImage:
+                  type: string
+            Comments:
+              type: object
+              properties:
+                id:
+                  type: number 
+                content:
+                  type: string 
+                isChange: 
+                  type: boolean 
+                updateAt: 
+                  type: date
+        totalRecord:
           type: number
-        userId: 
-          type: number 
-        ischange:
-          type: boolean
-        content:
-          type: string
-        createdAt: 
-          type: date 
-        updateAt:
-          type: date 
+        totalPage:
+          type: number
+        limit: 
+          type: number
+        page:
+          type: number
       example:
-        id: 1
-        userId: 1
-        postId: 1 
-        isChange: false 
-        content: You are very beautiful
-        createdAt: 2021-09-15T08:11:22.838Z
-        updateAt: 2021-09-15T08:11:22.838Z
+        postId: 1
+        result:
+          - id: 1
+            profile:
+              firstName: Thanh
+              lastName: Hai
+              avtImage: null
+            Comments:
+              id: 1
+              isChange: false 
+              content: You are very beautiful
+              updatedAt: 2021-09-15T08:11:22.838Z
+          - id: 1
+            profile:
+              firstName: Thanh
+              lastName: Hai
+              avtImage: null
+            Comments:
+              id: 2
+              isChange: false 
+              content: You are very beautiful
+              updatedAt: 2021-09-15T08:11:22.838Z
+        totalRecord: 10
+        totalPage: 5
+        limit: 2  
+        page: 1
     Messages: 
       type: object
       properties:
