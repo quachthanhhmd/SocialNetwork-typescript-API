@@ -23,6 +23,11 @@ router
 router
     .post("/comment/:postId", auth(), validate(postValidation.createComment), postRoutes.createComment)
     .get("/comment/:postId", validate(postValidation.getPagingUserComment), postRoutes.getUserCommentList);
+    
+router
+    .patch("/comment/:commentId", auth(), validate(postValidation.updateComment), postRoutes.updateComment);
+
+
 export default router;
 
 /**
@@ -388,4 +393,42 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *       "500":
  *         $ref: '#/components/responses/InternalError'     
+ */
+
+
+/**
+ * @swagger
+ * /post/comment/{commentId}:
+ *   patch: 
+ *     summary: Update content of comment
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: commentId 
+ *         schema:
+ *           type: number 
+ *           required: true
+ *     requestBody:
+ *       content: 
+ *         application/json: 
+ *           schema:
+ *             type: object 
+ *             properties:
+ *               content:       
+ *                 type: string 
+ *                 required: true 
+ *                 example: Today is Monday
+ *     responses:
+ *       "200":
+ *         description: Success
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'
  */

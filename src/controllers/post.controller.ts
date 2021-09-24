@@ -136,6 +136,24 @@ const getUserCommentList = catchAsync(async (req: Request<any, any, any, IPagina
     res.status(httpStatus.OK).send(userCommentList);
 })
 
+
+
+
+//change content of comment
+const updateComment = catchAsync( async (req: RequestWithUser, res: Response) => {
+
+    const commentId: number = +req.params.commentId;
+    const userId: number = req.user!.id;
+
+    const isBelongto = await commentService.isBelongtoUser(userId, commentId);
+
+    if (!isBelongto) throw AuthError.Forbidden;
+
+    await commentService.updateComment(commentId, req.body.content);
+
+    res.status(httpStatus.OK).send({});
+})
+
 export default {
     createPost,
     getOnePost,
@@ -144,6 +162,7 @@ export default {
     updateEmoij,
     getUserEmoijList,
     createComment,
-    getUserCommentList
+    getUserCommentList,
+    updateComment
 
 }
