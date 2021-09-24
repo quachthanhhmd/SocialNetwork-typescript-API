@@ -7,7 +7,7 @@ import UserError from "../constants/apiError/user.contant";
 import MessageError from "../constants/apiError/message.constant";
 
 import { IMessageContent, IMessageCreate } from "../interfaces/message.interface";
-import { IPagination, ISearchPagination } from "../interfaces/pagination.interface";
+import { IPagination, IPaginationResult, ISearchPagination } from "../interfaces/pagination.interface";
 
 /**
  * Find  a conversation of user 
@@ -41,17 +41,67 @@ const findAConversation = async (userId: number, targetId: number): Promise<Mess
 }
 
 /**
+ * Count Record by query
+ * @param {number} userId 
+ * @param {number} targetId 
+ * @param {ISearchPagination} paging 
+ * @returns
+ */
+const countMessageByQuery = async (userId: number, targetId: number, paging: ISearchPagination) => {
+
+    const searchString = paging.search ? paging.search : "";
+     const totalRecord =  await Message.count({
+        where: {
+            [Op.and]: [
+                {
+                    [Op.or]: [
+                        {
+                            [Op.and]: [
+                                { sourceId: userId, },
+                                { targetId: targetId },
+                                { isDeletedA: false },
+                            ]
+                        },
+                        {
+                            [Op.and]: [
+                                { sourceId: targetId, },
+                                { targetId: userId },
+                                { isDeletedB: false },
+                            ]
+                        },
+
+                    ]
+                },
+                {
+                    content: {
+                        [Op.like]: `%${searchString}%`
+                    }
+                }
+            ]
+        },
+
+    });
+    return {
+        totalRecord,
+        totalPage: Math.ceil(totalRecord / paging.limit),
+        limit: paging.limit,
+        page: paging.page,
+    }
+}
+
+
+/**
  * Get list message to display
  * @param {number} userId 
  * @param {number} targetId 
  * @param {IPagination} paging 
  * @returns {Promise<Array<Message> | null>}
  */
-const findListMessage = async (userId: number, targetId: number, paging: ISearchPagination): Promise<Array<Message> | null> => {
+const findListMessage = async (userId: number, targetId: number, paging: ISearchPagination)=> {
 
     const searchString = paging.search ? paging.search : "";
 
-    return await Message.findAll({
+    const result =  await Message.findAll({
         attributes: ["id", "type", "content", "link", "status"],
 
         where: {
@@ -86,6 +136,10 @@ const findListMessage = async (userId: number, targetId: number, paging: ISearch
         limit: paging.limit,
         offset: paging.limit * (paging.page - 1),
     })
+
+    const pagingStatistic :IPaginationResult = await countMessageByQuery(userId, targetId, paging);
+
+    return Object.assign({result: result}, pagingStatistic);
 }
 
 /**

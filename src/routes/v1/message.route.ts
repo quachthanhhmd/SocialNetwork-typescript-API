@@ -31,6 +31,7 @@ export default router;
  * @swagger
  * /message/{targetId}:
  *   get:
+ *     summary: get list message sort by create time
  *     description: get list message sort by create time
  *     tags: [Message]
  *     security:
@@ -57,7 +58,10 @@ export default router;
  *           type: string
  *     responses:
  *       "200":
- *         $ref: '#/components/schemas/Messages'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Messages'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

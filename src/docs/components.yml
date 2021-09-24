@@ -106,33 +106,47 @@ components:
         createdAt: 2021-09-15T08:11:22.838Z
         updateAt: 2021-09-15T08:11:22.838Z
     Messages: 
-      type: array
-      items:
-        type: object  
-        properties:
-          id:
-            type: number
-          content:
-            type: string
-          link:
-            type: string
-          type:
-            type: string
-            enum: ["text", "file", "video", "image"]
-          status:
-            type: string
-            enum: ["waiting", "sent", "seen"]
-      examples:
-        - id: 1
-          content: Hello, my name is Thanh.
-          link: null
-          type: text
-          status: sent
-        - id: 2
-          content: I'll show u my picture.
-          link: https://cine.megamind.vn/wp-content/uploads/2020/12/tran-duc-bo-mew-mew-300x300.jpg
-          type: image
-          status: waiting        
+      type: object
+      properties:
+        items:
+          type: object  
+          properties:
+            id:
+              type: number
+            content:
+              type: string
+            link:
+              type: string
+            type:
+              type: string
+              enum: ["text", "file", "video", "image"]
+            status:
+              type: string
+              enum: ["waiting", "sent", "seen"]
+        totalResult:
+          type: number
+        totalPage:
+          type: number
+        limit:
+          type: number 
+        page:
+          type: number
+      example:
+        result:
+          - id: 1
+            content: Hello, my name is Thanh.
+            link: null
+            type: text
+            status: sent
+          - id: 2
+            content: I'll show u my picture.
+            link: https://cine.megamind.vn/wp-content/uploads/2020/12/tran-duc-bo-mew-mew-300x300.jpg
+            type: image
+            status: waiting
+        totalResult: 4
+        totalPage: 2
+        limit: 2
+        page: 1
     Error:
       type: object
       properties:
