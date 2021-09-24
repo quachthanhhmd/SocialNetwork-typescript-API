@@ -1,6 +1,6 @@
 import { EMOIJ } from './../constants/emoji.constant';
 import { IUpdateEmoij } from './../interfaces/emoij.interface';
-import { IPagination, ISearchPagination } from './../interfaces/pagination.interface';
+import { IPagination, IPaginationResult, ISearchPagination } from './../interfaces/pagination.interface';
 import db from "../models/index";
 import Post from "../models/userPosts";
 
@@ -74,16 +74,49 @@ const findPostById = async (postId: number): Promise<Post | null> => {
 }
 
 /**
+ * Count all post in DB by query
+ * @param {ISearchPagination} query 
+ * @returns  {Promise<IPaginationResult>}
+ */
+const countAllPostByQuery = async (query: ISearchPagination): Promise<IPaginationResult> => {
+
+    const queryString: string = query.search ? `%${query.search}%` : "%%";
+    const totalRecord = await db.UserPost.count({
+        where: {
+            content: {
+                [Op.like]: queryString,
+            },
+        },
+        include: [{
+            model: db.Photo,
+            as: "photos",
+            attributes: ["id", "imageLink"],
+        },
+        {
+            model: db.Comment,
+            as: "commets"
+        }],
+    });
+
+    return {
+        totalRecord,
+        totalPage: Math.ceil(totalRecord / query.limit),
+        limit: query.limit,
+        page: query.page,
+    }
+}
+
+/**
  *  find list post
  * @param query 
  * @returns 
  */
-const findPostList = async (query: ISearchPagination): Promise<Array<Post> | null> => {
+const findPostList = async (query: ISearchPagination) => {
 
 
 
     const queryString: string = query.search ? `%${query.search}%` : "%%";
-    return await db.UserPost.findAll({
+    const userPostList =  await db.UserPost.findAll({
         where: {
             content: {
                 [Op.like]: queryString,
@@ -104,6 +137,9 @@ const findPostList = async (query: ISearchPagination): Promise<Array<Post> | nul
         limit: query.limit,
         offset: query.limit * (query.page - 1),
     })
+    const pagingResult = await countAllPostByQuery(query);
+
+    return Object.assign({result: userPostList}, pagingResult);
 }
 
 /**
@@ -170,7 +206,7 @@ const ChangeStateEmoij = async (userId: number, postId: number, bodyUpdate: IUpd
 
     // 1 if emoij, -1 if unemoij
     // if click into emoij 2 times, emoij will be delete, contrary, change emoij state
-    const state: number = checkStateUpdate? 1: -1;
+    const state: number = checkStateUpdate ? 1 : -1;
 
     //update post state
     await Post.update(
@@ -181,8 +217,8 @@ const ChangeStateEmoij = async (userId: number, postId: number, bodyUpdate: IUpd
             }
         }
     );
-  
-    
+
+
 }
 
 interface IViewUserPost {
@@ -195,7 +231,7 @@ const getUserEmoijList = async (postId: number) => {
 
 
     const post = await findPostById(postId);
-    
+
     if (!post) throw AuthError.NotFound;
 
     const userEmoijList = await userService.findEmoijUserList(postId);

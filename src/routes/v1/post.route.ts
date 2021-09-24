@@ -104,35 +104,50 @@ export default router;
  *         content: 
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 totalRecord: 
+ *                   type: number 
+ *                 totalPage:
+ *                   type: number
+ *                 limit:
+ *                   type: number
+ *                 page: 
+ *                   type: number 
  *             example:
- *               - id: 1
- *                 content: Hello, my name is thanh
- *                 isHidden: false
- *                 isChange: false
- *                 userId: 1 
- *                 createdAt: 2021-09-15T08:11:22.838Z
- *                 updateAt: 2021-09-15T08:11:22.838Z
- *                 file: 
- *                   - id: 1 
- *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg
- *                   - id: 2 
- *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg      
- *               - id: 2
- *                 content: Hello, my name is thanh
- *                 isHidden: false
- *                 isChange: false
- *                 userId: 1 
- *                 createdAt: 2021-09-15T08:11:22.838Z
- *                 updateAt: 2021-09-15T08:11:22.838Z
- *                 file: 
- *                   - id: 1 
- *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg 
- *                   - id: 2 
- *                     imageLink: https://i.stack.imgur.com/HdeKH.jpg
- *               
+ *               result:
+ *                 - id: 1
+ *                   content: Hello, my name is thanh
+ *                   isHidden: false
+ *                   isChange: false
+ *                   userId: 1 
+ *                   createdAt: 2021-09-15T08:11:22.838Z
+ *                   updateAt: 2021-09-15T08:11:22.838Z
+ *                   file: 
+ *                     - id: 1 
+ *                       imageLink: https://i.stack.imgur.com/HdeKH.jpg
+ *                     - id: 2 
+ *                       imageLink: https://i.stack.imgur.com/HdeKH.jpg      
+ *                 - id: 2
+ *                   content: Hello, my name is thanh
+ *                   isHidden: false
+ *                   isChange: false
+ *                   userId: 1 
+ *                   createdAt: 2021-09-15T08:11:22.838Z
+ *                   updateAt: 2021-09-15T08:11:22.838Z
+ *                   file: 
+ *                     - id: 1 
+ *                       imageLink: https://i.stack.imgur.com/HdeKH.jpg 
+ *                     - id: 2 
+ *                       imageLink: https://i.stack.imgur.com/HdeKH.jpg
+ *               totalRecord: 2
+ *               totalPage: 2
+ *               limit: 2
+ *               page: 1
  *       "401": 
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
