@@ -60,8 +60,19 @@ const updateComment = async (commentId: number, content: string): Promise<void> 
     )
 }
 
+const deleteComment = async (commentId: number) => {
+
+    await Comment.destroy({
+        where: {
+            id: commentId,
+        }
+    })
+}
+
+
 export default {
     createComment,
     isBelongtoUser,
-    updateComment
+    updateComment,
+    deleteComment,
 }

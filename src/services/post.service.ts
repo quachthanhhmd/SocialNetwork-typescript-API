@@ -13,9 +13,22 @@ import AuthError from "../constants/apiError/auth.constant";
 
 import { ICreatePost, IUpdatePost } from "../interfaces/post.interface";
 import { Op } from 'sequelize';
-import userProfileService from './userProfile.service';
 import Users from '../models/user';
 
+/**
+ * Check if post belongs to user or not
+ * @param {number} userId 
+ * @param {number} postId 
+ * @returns {Promise<void>}
+ */
+const checkBelongto = async (userId: number, postId: number): Promise<Boolean> => {
+
+    const post = await Post.findByPk(postId);
+    
+    if (!post) return false;
+
+    return post.userId === userId? true : false;
+}
 
 /**
  * Create post
@@ -116,7 +129,7 @@ const findPostList = async (query: ISearchPagination) => {
 
 
     const queryString: string = query.search ? `%${query.search}%` : "%%";
-    const userPostList =  await db.UserPost.findAll({
+    const userPostList = await db.UserPost.findAll({
         where: {
             content: {
                 [Op.like]: queryString,
@@ -139,7 +152,7 @@ const findPostList = async (query: ISearchPagination) => {
     })
     const pagingResult = await countAllPostByQuery(query);
 
-    return Object.assign({result: userPostList}, pagingResult);
+    return Object.assign({ result: userPostList }, pagingResult);
 }
 
 /**
@@ -259,7 +272,22 @@ const getCommentUserList = async (postId: number, paging: IPagination) => {
     const userCommentList = await userService.findCommentUserList(postId, paging);
 
 
-    return Object.assign({postId}, userCommentList);
+    return Object.assign({ postId }, userCommentList);
+}
+
+
+/**
+ * Delete post, be sure to check belongs to before delete
+ * @param postId 
+ * @return {Promise<void>}
+ */
+const deletePost = async (postId: number): Promise<void> => {
+
+    await Post.destroy({
+        where: {
+            id: postId,
+        }
+    })
 }
 
 export default {
@@ -270,5 +298,7 @@ export default {
     checkOwnPost,
     ChangeStateEmoij,
     getUserEmoijList,
-    getCommentUserList
+    getCommentUserList,
+    deletePost,
+    checkBelongto
 }

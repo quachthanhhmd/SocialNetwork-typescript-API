@@ -14,7 +14,8 @@ router
 
 router
     .get("/:postId", validate(postValidation.getPost), postRoutes.getOnePost)   
-    .patch("/:postId", auth(), validate(postValidation.updatePost), postRoutes.updatePost);
+    .patch("/:postId", auth(), validate(postValidation.updatePost), postRoutes.updatePost)
+    .delete("/:postId", auth(), validate(postValidation.deletePost), postRoutes.deletePost);
 
 router
     .patch("/emoij/:postId", auth(), validate(postValidation.updateEmoij), postRoutes.updateEmoij)
@@ -25,7 +26,8 @@ router
     .get("/comment/:postId", validate(postValidation.getPagingUserComment), postRoutes.getUserCommentList);
     
 router
-    .patch("/comment/:commentId", auth(), validate(postValidation.updateComment), postRoutes.updateComment);
+    .patch("/comment/:commentId", auth(), validate(postValidation.updateComment), postRoutes.updateComment)
+    .delete("/comment/:commentId", auth(), validate(postValidation.deleteComment), postRoutes.deleteComment);
 
 
 export default router;
@@ -227,6 +229,22 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *       "500":
  *         $ref: '#/components/responses/InternalError'
+ *   delete:
+ *     summary: Delete their own post
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: postId 
+ *         schema: 
+ *           type: number
+ *           required: true
+ *     responses:
+ *       "200": 
+ *         $ref: '#/components/schemas/Post'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'
  */
 
 
@@ -356,10 +374,11 @@ export default router;
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Comments'
+ *               $ref: '#/components/schemas/CommentList'
  *       "500":
  *         $ref: '#/components/responses/InternalError'
  *   post: 
+ *     summary: Create new comment
  *     description: Create new comment
  *     tags: [Post]
  *     security:
@@ -420,6 +439,28 @@ export default router;
  *                 type: string 
  *                 required: true 
  *                 example: Today is Monday
+ *     responses:
+ *       "200":
+ *         description: Success
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'
+ *   delete: 
+ *     summary: Delete comment
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: commentId 
+ *         schema:
+ *           type: number 
+ *           required: true
  *     responses:
  *       "200":
  *         description: Success

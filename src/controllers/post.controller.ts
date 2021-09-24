@@ -81,13 +81,29 @@ const updatePost = catchAsync(async (req: RequestWithUserAndUpdatePost, res: Res
 })
 
 
+//delete Post
+const deletePost = catchAsync(async (req: RequestWithUser, res: Response) => {
+
+    const postId: number = +req.params.postId;
+    const userId: number = req.user!.id;
+
+    const isBelongto = await postService.checkBelongto(userId, postId);
+
+    if (!isBelongto)
+        throw AuthError.Forbidden;
+
+    await postService.deletePost(postId);
+
+    res.status(httpStatus.OK).send({});
+})
+
 interface RequestWithUserAndEmoij extends Request {
     user: IUserInfoSummary,
     body: IUpdateEmoij,
 }
 
 //Emoij for pos
-const updateEmoij =catchAsync(async (req:RequestWithUserAndEmoij, res: Response)=> {
+const updateEmoij = catchAsync(async (req: RequestWithUserAndEmoij, res: Response) => {
 
     const userId = req.user!.id;
     const postId: number = +req.params.postId;
@@ -98,7 +114,7 @@ const updateEmoij =catchAsync(async (req:RequestWithUserAndEmoij, res: Response)
 });
 
 //get info of user who emoij in the post
-const getUserEmoijList =  catchAsync(async (req: Request, res: Response) => {
+const getUserEmoijList = catchAsync(async (req: Request, res: Response) => {
 
     const postId: number = +req.params.postId;
 
@@ -108,16 +124,16 @@ const getUserEmoijList =  catchAsync(async (req: Request, res: Response) => {
 })
 
 //create comments for post
-interface RequestWithUser extends Request {
+interface RequestWithUserUpdateComment extends Request {
     user: IUserInfoSummary,
     body: {
         content: string
     }
 }
 
-const createComment = catchAsync(async (req: RequestWithUser, res: Response) => {
+const createComment = catchAsync(async (req: RequestWithUserUpdateComment, res: Response) => {
 
-    const postId : number = +req.params.postId;
+    const postId: number = +req.params.postId;
     const userId: number = req.user!.id;
 
     const newComment = await commentService.createComment(userId, postId, req.body!.content);
@@ -130,7 +146,7 @@ const createComment = catchAsync(async (req: RequestWithUser, res: Response) => 
 const getUserCommentList = catchAsync(async (req: Request<any, any, any, IPagination>, res: Response) => {
 
     const postId: number = +req.params.postId;
-    
+
     const userCommentList = await postService.getCommentUserList(postId, req.query);
 
     res.status(httpStatus.OK).send(userCommentList);
@@ -140,7 +156,7 @@ const getUserCommentList = catchAsync(async (req: Request<any, any, any, IPagina
 
 
 //change content of comment
-const updateComment = catchAsync( async (req: RequestWithUser, res: Response) => {
+const updateComment = catchAsync(async (req: RequestWithUserUpdateComment, res: Response) => {
 
     const commentId: number = +req.params.commentId;
     const userId: number = req.user!.id;
@@ -152,6 +168,27 @@ const updateComment = catchAsync( async (req: RequestWithUser, res: Response) =>
     await commentService.updateComment(commentId, req.body.content);
 
     res.status(httpStatus.OK).send({});
+});
+
+
+interface RequestWithUser extends Request {
+
+    user: IUserInfoSummary,
+}
+
+//delete comment
+const deleteComment = catchAsync(async (req: RequestWithUser, res: Response) => {
+
+    const commentId = +req.params.commentId;
+    const userId = req.user!.id;
+
+    const checkBelongto = await commentService.isBelongtoUser(userId, commentId);
+
+    if (!checkBelongto) throw AuthError.Forbidden;
+
+    await commentService.deleteComment(commentId);
+
+    res.status(httpStatus.OK).send({});
 })
 
 export default {
@@ -159,10 +196,11 @@ export default {
     getOnePost,
     getPostList,
     updatePost,
+    deletePost,
     updateEmoij,
     getUserEmoijList,
     createComment,
     getUserCommentList,
-    updateComment
-
+    updateComment,
+    deleteComment
 }

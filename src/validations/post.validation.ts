@@ -81,15 +81,28 @@ const updateComment = {
     })
 }
 
+const deleteComment = {
+    params: Joi.object().keys({
+        commentId: Joi.number().required()
+    })
+}
+
+const deletePost = {
+    params: Joi.object().keys({
+        postId: Joi.number().required()
+    })
+}
 
 export default {
     getPostList,
     getPost,
     createPost,
+    deletePost,
     updatePost,
     updateEmoij,
     getUserEmoijList,
     createComment,
     getPagingUserComment,
     updateComment,
+    deleteComment,
 }

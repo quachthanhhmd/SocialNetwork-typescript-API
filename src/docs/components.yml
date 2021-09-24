@@ -80,7 +80,27 @@ components:
         refesh:
           - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
             expire: 2021-09-15T08:11:22.838Z
-    Comments:
+
+    Comment: 
+      type: object
+      properties:
+        id:
+          type: number 
+        content:
+          type: string 
+        isChange: 
+          type: boolean 
+        updatedAt: 
+          type: date
+        createdAt:
+          type: date
+      example:
+        id: 1
+        content: Hello, my name is Thanh 
+        isChange: false
+        updatedAt: 2021-09-15T08:11:22.838Z
+        createdAt: 2021-09-15T08:11:22.838Z
+    CommentList:
       type: object
       properties:
         postId: 
@@ -108,7 +128,7 @@ components:
                   type: string 
                 isChange: 
                   type: boolean 
-                updateAt: 
+                updatedAt: 
                   type: date
         totalRecord:
           type: number
