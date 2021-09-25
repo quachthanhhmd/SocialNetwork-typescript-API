@@ -14,6 +14,11 @@ router.post("/", auth(), validate(backgroundValidation.createBackground), backgr
 router 
     .patch("/:backgroundId", auth(), validate(backgroundValidation.updateBackground), backgroundRoutes.updateBackground)
     .delete("/:backgroundId", auth(), validate(backgroundValidation.deleteBackground), backgroundRoutes.deleteBackground)
+
+router
+    .get("/:userId",  validate(backgroundValidation.findAllBackground), backgroundRoutes.findAllBackground);
+
+
 export default router;
 
 
@@ -153,4 +158,33 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *       "500":
  *         $ref: '#/components/responses/InternalError'      
+ */
+
+/**
+ * @swagger
+ * /background/{userId}:
+ *   get:
+ *     summary: Get all background of user  
+ *     tags: [Background] 
+ *     parameters: 
+ *       - in: path
+ *         name: userId
+ *         schema: 
+ *           type: number
+ *           required: true
+ *     responses:
+ *       "200":
+ *         description: Get Sucess
+ *         content: 
+ *           application/json:
+ *             schema: 
+ *               $ref: '#/components/schemas/BackgroundList'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError'  
  */

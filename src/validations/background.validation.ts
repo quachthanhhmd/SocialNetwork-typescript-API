@@ -29,8 +29,16 @@ const deleteBackground = {
     })
 }
 
+
+const findAllBackground = {
+    params: Joi.object().keys({
+        userId: Joi.number().required()
+    })
+}
+
 export default {
     createBackground,
     updateBackground,
-    deleteBackground
+    deleteBackground,
+    findAllBackground
 }

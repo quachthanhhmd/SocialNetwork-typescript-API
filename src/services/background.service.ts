@@ -41,7 +41,7 @@ const findBackgroundById = async (id: number): Promise<Background | null> => {
  */
 const createBackground = async (userId: number, createBody: IBackgroundCreate): Promise<Background> => {
 
-    Object.assign(createBody, {userId : userId});
+    Object.assign(createBody, { userId: userId });
     return await Background.create(createBody);
 }
 
@@ -76,10 +76,27 @@ const deleteBackground = async (backgroundId: number) => {
     })
 }
 
+/**
+ * Find all background of user
+ * @param {number} userId
+ * @return {Promise<Array<Background> | null>} 
+ */
+const findAllBackground = async (userId: number): Promise<Array<Background> | null> => {
+
+    return await Background.findAll( {
+        where: {
+            userId: userId
+        }
+    })
+    
+
+}
+
 export default {
     createBackground,
     updateBackground,
     checkBelongsto,
-    deleteBackground
+    deleteBackground,
+    findAllBackground
 }
 

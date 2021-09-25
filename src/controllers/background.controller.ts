@@ -71,8 +71,20 @@ const deleteBackground = catchAsync(async(req: RequestWithUser, res: Response) =
     res.status(httpStatus.OK).send({});
 })
 
+//No need to login to watch background
+const findAllBackground = catchAsync(async (req: Request, res: Response) => {
+
+    const userId = +req.params.userId;
+
+    const backgroundList = await backgroundService.findAllBackground(userId);
+
+    res.status(httpStatus.OK).send(backgroundList);
+})
+
+
 export default {
     createBackground,
     updateBackground,
-    deleteBackground
+    deleteBackground,
+    findAllBackground
 }

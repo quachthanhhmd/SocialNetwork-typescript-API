@@ -98,14 +98,48 @@ components:
         link:
           type: string
         userId: 
-          type: string
+          type: number
       example: 
         id: 1 
         name: University of Sciences
         status: college
         type: current
         description: At HCMC
-        userId: 1        
+        userId: 1
+    BackgroundList:
+      type: array 
+      items:
+        type: object
+        properties:
+          id: 
+            type: string
+          name:
+            type: string
+          status:
+            type: string
+            enum: ["current", "past"]
+          type: 
+            type: string 
+            enum: ["college","highschool", "work"]
+          description:
+            type: string
+          link:
+            type: string
+          userId: 
+            type: number 
+      example:
+        - id: 1 
+          name: University of Sciences
+          status: college
+          type: current
+          description: At HCMC
+          userId: 1
+        - id: 2 
+          name: University of Sciences
+          status: college
+          type: current
+          description: At HCMC
+          userId: 1       
     Comment: 
       type: object
       properties:
