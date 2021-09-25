@@ -5,12 +5,13 @@ import { STATUS, TYPEBACKGROUND } from "../constants/background.constant";
 
 type UserBackgroundAttributes = {
 
-    id: number,
-    status: string,
-    link: string,
-    type: string,
-    description: string,
-    name: string,
+    id?: number,
+    status?: string,
+    link?: string,
+    type?: string,
+    description?: string,
+    name?: string,
+    userId?: number,
 };
 
 type UserBackgroundCreationAttributes = Optional<UserBackgroundAttributes, "id">;
@@ -23,6 +24,7 @@ class UserBackground extends Model<UserBackgroundCreationAttributes, UserBackgro
     public type!: string;
     public description!: string;
     public name!: string;
+    public readonly userId!: number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -61,6 +63,14 @@ UserBackground.init({
         allowNull: true,
         validate: {
             isUrl: true,
+        }
+    },
+    userId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+            model: "user",
+            key: 'id',
         }
     }
 }, {

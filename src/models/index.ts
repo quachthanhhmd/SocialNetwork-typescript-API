@@ -53,8 +53,8 @@ import Emoij from "./emoij";
     User.hasMany(Comment, {foreignKey: "userId"});
     Comment.belongsTo(User, {foreignKey: "userId"});
 
-    User.hasMany(UserBackground, {as :"backgrounds"});
-    UserBackground.belongsTo(User);
+    User.hasMany(UserBackground, {foreignKey: "userId", as :"backgrounds"});
+    UserBackground.belongsTo(User, {foreignKey: "userId"});
 
     //User with messages
     User.hasMany(Message, {
