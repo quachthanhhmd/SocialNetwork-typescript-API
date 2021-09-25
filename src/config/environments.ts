@@ -8,6 +8,7 @@ const envSchema: Joi.ObjectPropertiesSchema = Joi.object()
     .keys({
         TYPE: Joi.string().valid('production', 'development', 'test').required(),
         PORT: Joi.number().default(3000),
+        DB_DATABASE_HOST: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_DATABASE_NAME: Joi.string().required(),
@@ -35,6 +36,7 @@ export default {
     PORT: env.PORT,
     DB: {
         DB_DATABASE_NAME: env.DB_DATABASE_NAME,
+        DB_DATABASE_HOST: env.DB_DATABASE_HOST,
         DB_DATABASE_PORT: env.DB_DATABASE_PORT,
         DB_PASSWORD: env.DB_PASSWORD,
         DB_DIALECT: env.DB_DIALECT,

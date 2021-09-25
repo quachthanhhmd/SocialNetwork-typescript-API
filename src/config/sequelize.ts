@@ -8,6 +8,7 @@ export const sequelize = new Sequelize(
     env.DB.DB_USERNAME,
     env.DB.DB_PASSWORD,
     {
+        host: env.DB.DB_DATABASE_HOST,
         dialect: env.DB.DB_DIALECT,
         port: env.DB.DB_DATABASE_PORT,
         query: {
