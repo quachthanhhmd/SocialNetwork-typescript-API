@@ -80,7 +80,32 @@ components:
         refesh:
           - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
             expire: 2021-09-15T08:11:22.838Z
-
+    Background:
+      type: object
+      properties:
+        id: 
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: ["current", "past"]
+        type: 
+          type: string 
+          enum: ["college","highschool", "work"]
+        description:
+          type: string
+        link:
+          type: string
+        userId: 
+          type: string
+      example: 
+        id: 1 
+        name: University of Sciences
+        status: college
+        type: current
+        description: At HCMC
+        userId: 1        
     Comment: 
       type: object
       properties:

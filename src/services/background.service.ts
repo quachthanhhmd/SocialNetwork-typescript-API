@@ -39,8 +39,9 @@ const findBackgroundById = async (id: number): Promise<Background | null> => {
  * Create a background for user
  * @param createBody 
  */
-const createBackground = async (createBody: IBackgroundCreate): Promise<Background> => {
+const createBackground = async (userId: number, createBody: IBackgroundCreate): Promise<Background> => {
 
+    Object.assign(createBody, {userId : userId});
     return await Background.create(createBody);
 }
 

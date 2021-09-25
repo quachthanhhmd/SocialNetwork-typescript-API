@@ -5,7 +5,7 @@ import authRoutes from "./auth.route";
 import userRoutes from "./user.route";
 import messageRoutes from "./message.route";
 import postRoutes from "./post.route";
-
+import backgroundRoutes from "./background.route";
 
 
 import env from "../../config/environments";
@@ -33,6 +33,10 @@ const indexRouteList: Array<indexRoutesAttributes> = [
     {
         path: "/post",
         route: postRoutes,
+    },
+    {
+        path: '/background',
+        route: backgroundRoutes
     }
 ];
 
