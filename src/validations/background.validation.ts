@@ -23,8 +23,14 @@ const updateBackground = {
     })
 }
 
+const deleteBackground = {
+    params: Joi.object().keys({
+        backgroundId: Joi.number().required()
+    })
+}
+
 export default {
     createBackground,
     updateBackground,
-
+    deleteBackground
 }

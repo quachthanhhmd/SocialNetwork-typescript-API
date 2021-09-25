@@ -12,8 +12,8 @@ router.post("/", auth(), validate(backgroundValidation.createBackground), backgr
 
 
 router 
-    .patch("/:backgroundId", auth(), validate(backgroundValidation.updateBackground), backgroundRoutes.updateBackground);
-
+    .patch("/:backgroundId", auth(), validate(backgroundValidation.updateBackground), backgroundRoutes.updateBackground)
+    .delete("/:backgroundId", auth(), validate(backgroundValidation.deleteBackground), backgroundRoutes.deleteBackground)
 export default router;
 
 
@@ -121,6 +121,30 @@ export default router;
  *     responses:
  *       "200":
  *          description: Update Sucess
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *       "500":
+ *         $ref: '#/components/responses/InternalError' 
+ * 
+ *   delete:
+ *     summary: Create background of user
+ *     description: Cretae background of user  
+ *     tags: [Background]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path 
+ *         name: backgroundId 
+ *         schema:
+ *           type: number 
+ *           required: true
+ *     responses:
+ *       "200":
+ *          description: delete Sucess
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

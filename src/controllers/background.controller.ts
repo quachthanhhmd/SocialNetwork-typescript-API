@@ -52,7 +52,27 @@ const updateBackground = catchAsync(async (req: RequestCreateBackground, res: Re
     res.status(httpStatus.OK).send({});
 })
 
+
+interface RequestWithUser extends Request {
+    user: IUserInfoSummary,
+}
+
+const deleteBackground = catchAsync(async(req: RequestWithUser, res: Response) => {
+
+    const backgroundId = +req.params.backgroundId;
+    const userId = req.user!.id
+
+    const isBelongto = await backgroundService.checkBelongsto(userId, backgroundId);
+
+    if (!isBelongto) throw AuthError.Forbidden;
+
+    await backgroundService.deleteBackground(backgroundId);
+
+    res.status(httpStatus.OK).send({});
+})
+
 export default {
     createBackground,
     updateBackground,
+    deleteBackground
 }
