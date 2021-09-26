@@ -17,11 +17,14 @@ export const sequelize = new Sequelize(
     }
 );
 
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Connection has been established successfully.')
-    })
-    .catch(err => {
-        console.error('Unable to connect to the database:', err)
-    })
+
+if (env.TYPE === 'type') {
+    sequelize
+        .authenticate()
+        .then(() => {
+            console.log('Connection has been established successfully.')
+        })
+        .catch(err => {
+            console.error('Unable to connect to the database:', err)
+        })
+}

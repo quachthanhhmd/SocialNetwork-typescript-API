@@ -11,15 +11,12 @@ interface UserAttributes {
   username: string,
   password: string,
   isVerified?: Boolean,
-  //lastLogin?: Date | null,
-  //birthDay: Date,
-  //contactId?: string | null,
-  //avt?: string | null,
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> { }
 
 
+const regexPassword = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,})$/;
 
 class Users extends Model<UserCreationAttributes, UserAttributes>
   implements UserAttributes {
@@ -46,22 +43,14 @@ Users.init({
     allowNull: false,
     unique: true,
     validate: {
-      customValiate(username: string) {
-
-        if (username.length > 30)
-          return { msg: "username must be less than 30 character." }
-
-        if (!regexCheckNumber.test(username))
-          return {
-            msg: "username must have at least one number.",
-          }
-
-      }
+      isEmail: true,
     }
   },
   password: {
     type: DataTypes.STRING,
     set(password: string) {
+      if (!regexPassword.test(password))
+        throw Error("Password is not valid");
       const hash = initPasswordHash(password);
       this.setDataValue('password', hash);
     }

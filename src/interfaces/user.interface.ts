@@ -89,3 +89,14 @@ export interface IUserProfileUpdate {
     linkedin?: string,
     skype?: string,
 }
+
+export interface IUserSignUp {
+
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string,
+    password2: string,
+    birthDay: Date, 
+    gender: string, 
+}
