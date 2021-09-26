@@ -12,7 +12,7 @@ interface UserProfileAttributes {
     backgroundImage?: string | null,
     gender: string,
     birthDay: Date,
-    lastLogin?: Date | null,
+    
     avtImage?: string | null,
     displayName?: string,
     userId?: number
@@ -30,7 +30,7 @@ class UserProfile extends Model<UserProfileCreationAttributes, UserProfileAttrib
     public backgroundImage!: string | null;
     public gender!: string;
     public birthDay!: Date;
-    public lastLogin!: Date | null;
+    
     public avtImage!: string | null;
     public readonly userId!: number;
 

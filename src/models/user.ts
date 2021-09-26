@@ -11,6 +11,7 @@ interface UserAttributes {
   username: string,
   password: string,
   isVerified?: Boolean,
+  lastLogin?: Date | null,
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> { }
@@ -25,7 +26,7 @@ class Users extends Model<UserCreationAttributes, UserAttributes>
   public username!: string;
   public password!: string;
   public isVerified!: Boolean;
-
+  public lastLogin!: Date | null;
 
 
   public readonly createdAt!: Date;
@@ -53,12 +54,25 @@ Users.init({
       if (regexPassword.test(password)) {
         const hash = initPasswordHash(password);
         this.setDataValue('password', hash);
-        
+
       } else {
         throw new Error("Password is not valid");
       }
 
-     
+
+    }
+  },
+  lastLogin: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    set(value: string | Date) {
+      if (typeof value === "string")
+        this.setDataValue("lastLogin", new Date(value));
+      else
+        this.setDataValue("lastLogin", value);
+    },
+    validate: {
+      isBefore: new Date().toLocaleDateString(),
     }
   },
   isVerified: {
