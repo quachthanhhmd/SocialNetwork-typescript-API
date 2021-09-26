@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
     "start": "ts-node ./src/server.ts",
     "dev": "nodemon ./src/server.ts",
     "db": "ts-node ./src/buildDB.ts"

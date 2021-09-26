@@ -49,10 +49,16 @@ Users.init({
   password: {
     type: DataTypes.STRING,
     set(password: string) {
-      if (!regexPassword.test(password))
-        throw Error("Password is not valid");
-      const hash = initPasswordHash(password);
-      this.setDataValue('password', hash);
+
+      if (regexPassword.test(password)) {
+        const hash = initPasswordHash(password);
+        this.setDataValue('password', hash);
+        
+      } else {
+        throw new Error("Password is not valid");
+      }
+
+     
     }
   },
   isVerified: {

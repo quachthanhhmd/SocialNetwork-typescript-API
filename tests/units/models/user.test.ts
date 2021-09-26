@@ -33,9 +33,38 @@ describe("User Model", () => {
         });
 
         test("Should thrrow a error if username is not a email format.", async () => {
-            newUser.username = "InvalidEmail";
-            await expect(new User(newUser).validate()).rejects.toThrow();
+            const cloneUser: IUserTestAllField = { ...newUser };
+            cloneUser.username = "InvalidEmail";
+
+            await expect(new User(cloneUser).validate()).rejects.toThrow();
         });
+
+        test("Should throw a error if password doesn't have a UpperCase", async () => {
+            const cloneUser: IUserTestAllField = { ...newUser };
+            cloneUser.password = "thanh123456";
+            console.log(cloneUser);
+            await expect(User.create(cloneUser)).rejects.toEqual(expect.any(Error));
+        });
+
+        test("Should throw a error if password doesn't have a number.", async () => {
+            const cloneUser: IUserTestAllField = { ...newUser };
+            cloneUser.password = "ThanhHaiThanh";
+
+            await expect(User.create(cloneUser)).rejects.toThrow("Password is not valid");
+        });
+
+        test("Should throw a error if password doesn't have a lowercase.", async () => {
+            const cloneUser: IUserTestAllField = { ...newUser };
+            cloneUser.password = "THANHQUACHTHANH1";
+
+            await expect(User.create(cloneUser)).rejects.toThrow("Password is not valid");
+        });
+
+        test("Should throw a error if isVerified isn't Boolean type", async () => {
+            const cloneUser: IUserTestAllField = { ...newUser };
+            cloneUser.password = "Thanh1";
+            await expect(User.create(cloneUser)).rejects.toThrow("Password is not valid");
+        })
     })
 })
 
