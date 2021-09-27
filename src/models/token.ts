@@ -48,7 +48,10 @@ Token.init({
     },
     expire: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            isAfter: new Date().toLocaleDateString(),
+        }
     },
     userId: {
         type: DataTypes.INTEGER.UNSIGNED,
