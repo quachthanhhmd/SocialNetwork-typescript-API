@@ -47,10 +47,16 @@ UserProfile.init({
     },
     firstName: {
         type: DataTypes.STRING(30),
+        validate: {
+            max: 30,
+        },
         allowNull: false,
     },
     lastName: {
         type: DataTypes.STRING(30),
+        validate: {
+            max: 30,
+        },
         allowNull: false
     },
     displayName: {

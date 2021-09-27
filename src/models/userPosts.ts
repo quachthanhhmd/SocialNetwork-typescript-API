@@ -10,7 +10,7 @@ interface UserPostAttributes {
     content: string,
     isChange?: Boolean,
     isHidden?: Boolean,
-    userId: number,
+    userId?: number,
     totalEmoji?: number,
 }
 

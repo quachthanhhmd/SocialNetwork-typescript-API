@@ -1,11 +1,15 @@
+import { sequelize } from './../../../src/config/sequelize';
 import { IUserProfileAllField } from '../interfaces/userProfile.interface';
 import faker from "faker";
 
 import UserProfile from "../../../src/models/userProfile";
-import User from "../../../src/models/user";
+import db from "../../../src/models/index";
 
 
 
+afterAll(async () => {
+    await sequelize.close();
+})
 
 
 
@@ -73,15 +77,15 @@ describe("UserProfile model test!!", () => {
 
         test("Should throw a error if fistName is more than 30 characters.", async () => {
             const cloneUserProfile: IUserProfileAllField = {...newProfile};
-            cloneUserProfile.firstName = "x".repeat(31);
+            cloneUserProfile.firstName = "x".repeat(32);
 
             await expect(UserProfile.create(cloneUserProfile)).rejects.toThrow();
         });
 
         test("Should throw a error if lastName is more than 30 characters.", async () => {
             const cloneUserProfile: IUserProfileAllField = {...newProfile};
-            cloneUserProfile.lastName = "x".repeat(31);
-
+            cloneUserProfile.lastName = "x".repeat(32);
+        
             await expect(UserProfile.create(cloneUserProfile)).rejects.toThrow();
         });
         
